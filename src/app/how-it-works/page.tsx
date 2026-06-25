@@ -152,7 +152,7 @@ func VerifyMerklePath(leaf string, proof []string, root string) bool {
                     </div>
                   </div>
                   <div className="border-t border-neutral-800 pt-3 text-[10px] text-neutral-450 leading-relaxed font-sans font-medium">
-                    To audit a single Leaf hash (e.g. $H_A$), the verify client only needs the sibling hash $H_B$ and parent sibling $H_{CD}$ to calculate the root. This is the **Merkle Proof**. It reduces verification checks on 1,000,000 documents to just 20 hashing iterations.
+                    To audit a single Leaf hash (e.g. H_A), the verify client only needs the sibling hash H_B and parent sibling H_CD to calculate the root. This is the **Merkle Proof**. It reduces verification checks on 1,000,000 documents to just 20 hashing iterations.
                   </div>
                 </div>
 
