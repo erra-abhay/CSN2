@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "csn2.me — Zero-Downtime Deployment Pipeline",
-  description: "A live infrastructure experiment showcasing Azure VM Scale Set blue-green rollouts and Traefik load balancers.",
+  title: "csn2.me — Trueva Blockchain Certificate Trust",
+  description: "A public showcase demonstrating Trueva's decentralized validator network and immutable cryptographic certificate verification registry.",
 };
 
 export default function RootLayout({

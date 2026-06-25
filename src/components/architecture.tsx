@@ -17,53 +17,53 @@ export default function Architecture() {
 
   const nodes: Record<string, NodeDetails> = {
     registry: {
-      title: "Container Registry",
-      subtitle: "Azure Container Registry (ACR)",
-      description: "Stores compiled application container images. Manages staging and production tags.",
+      title: "Smart Contract Registry",
+      subtitle: "Trueva Registry Contract (TCR)",
+      description: "Deployed smart contract containing public keys of authorized issuers and roots of certificate batches.",
       details: [
-        "Immutable tags prevent runtime conflicts.",
-        "Image promotion copies the staging tag reference to the production tag.",
-        "Triggers zero VM package rebuilds during deploy."
+        "Immutable anchors prevent retrospective changes.",
+        "Batch commits verify multiple documents in a single transaction.",
+        "Secured by Proof-of-Authority consensus signatures."
       ]
     },
     fleet: {
-      title: "Auto-Scaling Fleet",
-      subtitle: "Virtual Machine Scale Set (VMSS)",
-      description: "A scaling group of identical stateless VM instances running the production application container.",
+      title: "Decentralized Validator Pool",
+      subtitle: "Proof-of-Authority (PoA) Nodes",
+      description: "Replicated nodes validating proposed blocks and serving verification queries to the gateway.",
       details: [
-        "Scales out from 6 up to 10 instances on CPU spikes.",
-        "Instances are ephemeral; they drain connections before recycling.",
-        "Runs Traefik agent to report health states dynamically."
+        "Scales read capacity dynamically to handle transaction peaks.",
+        "Requires quorum signatures for state transitions.",
+        "Maintains copy of the ledger containing Merkle roots."
       ]
     },
     anchor: {
-      title: "Deployment Anchor",
-      subtitle: "Dedicated VM (Isolated Network)",
-      description: "Runs orchestrator scripts that monitor the production registry tag and trigger upgrades.",
+      title: "Consensus Coordinator",
+      subtitle: "Orchestration & Block Creation",
+      description: "Consensus orchestrator running BFT rules to organize transactions and trigger node updates.",
       details: [
-        "Executes blue-green rolling upgrade scripts safely.",
-        "Triggers sequential VM re-provisions.",
-        "Ensures rollbacks execute instantly if a VM health check fails."
+        "Aggregates signed hash batches into block structures.",
+        "Propagates proposed state blocks sequentially to all nodes.",
+        "Triggers alert and isolates malicious node proposed mismatches."
       ]
     },
     proxy: {
-      title: "Traefik Reverse Proxy",
-      subtitle: "Traefik Routing Layer",
-      description: "Modern reverse proxy directing incoming user requests to the healthy instance pool.",
+      title: "Verification Gateway API",
+      subtitle: "RPC Node Gateway Layer",
+      description: "Load-balanced gateway routing verification checks to synchronized verifier nodes.",
       details: [
-        "Dynamically reads VM configuration updates.",
-        "Executes hitless hot-swaps between old and new version sets.",
-        "Applies strict health-check gating parameters."
+        "Dynamically reads current block height of nodes.",
+        "Enforces zero-downtime hot-swaps between synced block states.",
+        "Applies verification rate-limiting and query filters."
       ]
     },
     users: {
-      title: "End Users",
-      subtitle: "Production Traffic Load",
-      description: "Real web users sending active requests to acadhub/csn2.me.",
+      title: "Relying Parties",
+      subtitle: "Employers & Universities",
+      description: "Third-party entities sending verification queries to csn2.me.",
       details: [
-        "Experience 100% service uptime during transitions.",
-        "Zero HTTP 502/503 bad gateway codes.",
-        "Latency spikes are completely mitigated via TCP session draining."
+        "Experience 100% query reliability during block syncs.",
+        "Zero dependency on central registrar database access.",
+        "Sub-150ms verification proof latency globally."
       ]
     }
   };
@@ -96,7 +96,7 @@ export default function Architecture() {
         {/* Headings */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-neutral-900 mb-4">
-            System Architecture
+            Verification Network Topology
           </h2>
           <p className="text-neutral-600 text-sm md:text-base max-w-xl mx-auto">
             Interactive system flow. Tap or hover over any architectural node to view details of its operations.
@@ -109,7 +109,7 @@ export default function Architecture() {
           <div className="lg:col-span-3 bg-[#FAF9F6] border border-neutral-200/50 rounded-2xl p-8 shadow-sm flex flex-col justify-between min-h-[460px]">
             <div className="mb-8 flex items-center justify-between">
               <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider">
-                Interactive Fleet Topology
+                Interactive Ledger Topology
               </span>
               <span className="text-[10px] text-neutral-500 font-semibold flex items-center gap-1">
                 <HelpCircle size={12} className="text-neutral-400" /> Hover node to view details
@@ -122,7 +122,7 @@ export default function Architecture() {
               {/* Connecting line backgrounds */}
               <div className="hidden md:block absolute top-1/2 left-[10%] right-[10%] h-[1px] bg-neutral-200/80 -translate-y-1/2 -z-10" />
 
-              {/* Node 1: Container Registry */}
+              {/* Node 1: Smart Contract Registry */}
               <button
                 onMouseEnter={() => setActiveTooltip("registry")}
                 onClick={() => setActiveTooltip("registry")}
@@ -131,14 +131,14 @@ export default function Architecture() {
                 }`}
               >
                 <FolderGit2 className="text-accent mb-2.5 w-6 h-6" />
-                <span className="text-xs font-bold text-neutral-800">Container Registry</span>
-                <span className="text-[9px] text-neutral-400 mt-0.5 font-mono">ACR v128 / v129</span>
+                <span className="text-xs font-bold text-neutral-800">Contract Registry</span>
+                <span className="text-[9px] text-neutral-400 mt-0.5 font-mono">TCR blk-4820</span>
               </button>
 
               {/* Arrow */}
               <div className="hidden md:block text-neutral-400 font-black">→</div>
 
-              {/* Node 2: VM Scale Set Fleet */}
+              {/* Node 2: Decentralized Validator Pool */}
               <button
                 onMouseEnter={() => setActiveTooltip("fleet")}
                 onClick={() => setActiveTooltip("fleet")}
@@ -147,10 +147,10 @@ export default function Architecture() {
                 }`}
               >
                 <Server className="text-accent mb-2.5 w-6 h-6" />
-                <span className="text-xs font-bold text-neutral-800">VM Scale Set Fleet</span>
-                <span className="text-[9px] text-neutral-400 mt-0.5 font-mono">6 VM Instances</span>
+                <span className="text-xs font-bold text-neutral-800">Validator Pool</span>
+                <span className="text-[9px] text-neutral-400 mt-0.5 font-mono">6 consensus nodes</span>
                 
-                {/* Micro indicators representing VM state in real-time */}
+                {/* Micro indicators representing node state in real-time */}
                 <div className="flex gap-1.5 mt-3 justify-center">
                   {state.instances.slice(0, 6).map((inst) => {
                     let dotColor = "bg-neutral-300";
@@ -165,7 +165,7 @@ export default function Architecture() {
               {/* Arrow */}
               <div className="hidden md:block text-neutral-400 font-black">→</div>
 
-              {/* Node 3: Traefik Proxy */}
+              {/* Node 3: Verification Gateway API */}
               <button
                 onMouseEnter={() => setActiveTooltip("proxy")}
                 onClick={() => setActiveTooltip("proxy")}
@@ -174,14 +174,14 @@ export default function Architecture() {
                 }`}
               >
                 <Shield className="text-accent mb-2.5 w-6 h-6" />
-                <span className="text-xs font-bold text-neutral-800">Traefik Proxy</span>
-                <span className="text-[9px] text-neutral-400 mt-0.5 font-mono">Hot-Swap Layer</span>
+                <span className="text-xs font-bold text-neutral-800">RPC Gateway</span>
+                <span className="text-[9px] text-neutral-400 mt-0.5 font-mono">Verification API</span>
               </button>
 
               {/* Arrow */}
               <div className="hidden md:block text-neutral-400 font-black">→</div>
 
-              {/* Node 4: End Users */}
+              {/* Node 4: Relying Parties */}
               <button
                 onMouseEnter={() => setActiveTooltip("users")}
                 onClick={() => setActiveTooltip("users")}
@@ -190,12 +190,12 @@ export default function Architecture() {
                 }`}
               >
                 <Users className="text-accent mb-2.5 w-6 h-6" />
-                <span className="text-xs font-bold text-neutral-800">End Users</span>
-                <span className="text-[9px] text-neutral-400 mt-0.5 font-mono">Incoming Traffic</span>
+                <span className="text-xs font-bold text-neutral-800">Relying Parties</span>
+                <span className="text-[9px] text-neutral-400 mt-0.5 font-mono">API Verifiers</span>
               </button>
             </div>
 
-            {/* Anchor Machine Connection Card (Sits under VM scale set) */}
+            {/* Consensus Coordinator (Sits under Validator Pool) */}
             <div className="flex flex-col md:flex-row justify-center items-center gap-2 mt-4">
               <button
                 onMouseEnter={() => setActiveTooltip("anchor")}
@@ -206,8 +206,8 @@ export default function Architecture() {
               >
                 <Anchor className="text-accent w-5 h-5 shrink-0" />
                 <div>
-                  <span className="text-xs font-bold block text-white">Deployment Anchor</span>
-                  <span className="text-[9px] text-neutral-500 font-mono">Runs blue-green script</span>
+                  <span className="text-xs font-bold block text-white">Consensus Coordinator</span>
+                  <span className="text-[9px] text-neutral-500 font-mono">Orchestrates validation</span>
                 </div>
               </button>
             </div>
@@ -218,7 +218,7 @@ export default function Architecture() {
                 getTooltipContent()
               ) : (
                 <div className="text-center py-6 text-neutral-400 text-xs font-medium border border-dashed border-neutral-200 rounded-xl">
-                  Hover or tap any architectural node above to drill down into logs & operational metadata.
+                  Hover or tap any architectural node above to drill down into logs & state metadata.
                 </div>
               )}
             </div>
@@ -241,10 +241,10 @@ export default function Architecture() {
                     </span>
                   </div>
                   <h4 className="text-xs font-bold text-neutral-950 mb-1">
-                    Dual-Fleet Blue-Green
+                    Zero-Knowledge Proofs (ZKP)
                   </h4>
                   <p className="text-[11px] leading-relaxed text-neutral-600 font-medium">
-                    Provision two complete parallel Scale Set groups (Active & Staging) rather than swapping instances inside one fleet, which cuts deployment time in half.
+                    Enable verification of degree details (e.g. GPA range or completion status) without revealing any underlying personal information or identity attributes.
                   </p>
                 </div>
 
@@ -257,17 +257,17 @@ export default function Architecture() {
                     </span>
                   </div>
                   <h4 className="text-xs font-bold text-neutral-950 mb-1">
-                    Native Canary Rollouts
+                    Multi-Chain Anchoring
                   </h4>
                   <p className="text-[11px] leading-relaxed text-neutral-600 font-medium">
-                    Upgrade VMs natively via scale set canary policies. Traefik distributes 10% traffic to the first new VM, running validations before recycling the remaining fleet.
+                    Bridge the Trueva Registry across Ethereum L2s and Solana networks, allowing relying parties to verify documents directly in their native ecosystem contracts.
                   </p>
                 </div>
               </div>
             </div>
 
             <div className="mt-8 text-[10px] text-neutral-400 leading-normal font-medium">
-              Explore the source deployment scripts inside the secondary architecture documentation.
+              Explore the smart contract specifications inside the secondary architecture documentation.
             </div>
           </div>
 

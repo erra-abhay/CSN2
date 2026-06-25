@@ -30,8 +30,7 @@ export default function AboutPage() {
               About csn2.me
             </h1>
             <p className="text-neutral-600 text-base md:text-lg leading-relaxed max-w-3xl">
-              A public showcase and stress-testbed constructed to demonstrate the mechanics of zero-downtime, 
-              auto-scaling deployment pipelines.
+              A public showcase and playground constructed to demonstrate the mechanics of Trueva's blockchain-based certificate registry and verification ledger.
             </p>
           </div>
 
@@ -45,9 +44,9 @@ export default function AboutPage() {
                 Why this site exists
               </h3>
               <p className="text-xs md:text-sm text-neutral-600 leading-relaxed font-medium">
-                Most deployment pipelines are hidden away in internal company networks. 
-                csn2.me brings this backend orchestration to the public-facing web. 
-                It functions as a live portfolio piece demonstrating high-availability hosting patterns on cloud virtual machines.
+                Most blockchain registries are obscured by CLI interfaces and smart contract transaction codes. 
+                csn2.me brings this trust framework to the public-facing web. 
+                It serves as a live portfolio demonstration of how digital signatures, hashing, and decentralized node verification work under the hood.
               </p>
             </div>
 
@@ -59,9 +58,8 @@ export default function AboutPage() {
                 Strict Constraints
               </h3>
               <p className="text-xs md:text-sm text-neutral-600 leading-relaxed font-medium">
-                To keep the experiment honest, the site runs within a standard dockerized runtime 
-                on Azure Virtual Machine Scale Sets. Deploys follow the exact rolling, connection-drained blue-green 
-                lifecycle described on our landing page.
+                To keep the showcase honest, the simulator replicates a Proof-of-Authority consensus network across a pool of validator nodes. 
+                Certificate batch propagation and RPC gateway load balancing follow the exact cryptographic logic described throughout the platform.
               </p>
             </div>
           </div>
@@ -72,11 +70,11 @@ export default function AboutPage() {
               <Heart size={20} className="fill-current" />
             </div>
             <div>
-              <h4 className="text-sm font-bold text-white mb-2">Designed for reliability</h4>
+              <h4 className="text-sm font-bold text-white mb-2">Designed for academic registry integrity</h4>
               <p className="text-xs text-neutral-400 leading-relaxed">
-                Made for developers, infra engineers, and product builders. By showcasing active host IDs, 
-                dynamic VM states, and live telemetry split routing rules, csn2.me demonstrates that modern, 
-                high-availability deployment strategies are accessible, simple, and robust.
+                Made for developers, registrar offices, and product builders. By showcasing active validator statuses, 
+                cryptographic Merkle proofs, and live verification logs, csn2.me demonstrates that modern 
+                certificate validation is secure, simple, and open.
               </p>
             </div>
           </div>

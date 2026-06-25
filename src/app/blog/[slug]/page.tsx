@@ -9,63 +9,63 @@ import { blogPosts } from "../page";
 
 // Detail bodies for the posts
 const postBodies: Record<string, React.ReactNode> = {
-  "azure-scale-sets-blue-green": (
+  "decentralized-credential-verification": (
     <article className="space-y-6 text-neutral-600 text-sm md:text-base leading-relaxed">
       <p>
-        Rolling deployments are easy to explain but notoriously hard to execute without dropping a single HTTP packet.
-        On Azure, achieving hitless blue-green deployments with standard VM Scale Sets (VMSS) requires careful lifecycle orchestration.
+        Verifying digital credentials securely is a core requirement of modern record systems. Traditional database setups suffer from central vulnerabilities, privacy leakage risks, and reliance on single registrars.
+        By using Merkle Trees, Trueva enables complete verification without exposing raw student data or overloading database gateways.
       </p>
-      <h3 className="text-lg font-bold text-neutral-950 mt-8 mb-2">The Rolling Upgrade Lifecycle</h3>
+      <h3 className="text-lg font-bold text-neutral-950 mt-8 mb-2">The Cryptographic Proof Flow</h3>
       <p>
-        In our custom pipeline running for acadhub-api, we orchestrate the rollout step by step rather than relying on Azure’s default automatic rolling upgrade policy, which lacks custom network draining controls:
+        In the Trueva registry, the document anchoring process operates as follows:
       </p>
       <ul className="list-disc list-inside space-y-2">
-        <li><strong>Staging build verification:</strong> The runner builds a container image and tags it with a staging tag. Synthetic endpoint checks run verification tests.</li>
-        <li><strong>Production promotion:</strong> The registry tag is updated to point production to the staging container digest.</li>
-        <li><strong>Connection draining:</strong> Before recycling a VM instance, the deployment anchor tells Traefik to stop sending new TCP/HTTP requests to that host IP.</li>
-        <li><strong>Upgrade & verification:</strong> Once active requests settle, the instance is updated to the production image and verified. Only when health checks pass does Traefik re-register the node.</li>
+        <li><strong>Local Hashing:</strong> Document metadata (e.g., student name, GPA, distinction details) is hashed locally into a unique SHA-256 value. The raw data remains completely private.</li>
+        <li><strong>Merkle Tree Aggregation:</strong> Individual hashes are combined in pairs recursively to generate a Merkle Tree. This leaves us with a single hash at the top: the Merkle Root.</li>
+        <li><strong>Smart Contract Commit:</strong> The Merkle Root is committed via a signed transaction to the Trueva Contract Registry on the consensus ledger.</li>
+        <li><strong>Merkle Proof Checks:</strong> To verify, a verifier queries the RPC nodes with the certificate SHA-256 and the Merkle proof (a list of sibling hashes in the path). Checking the path computes the root hash, validating authenticity instantly in O(log N) time.</li>
       </ul>
       <h3 className="text-lg font-bold text-neutral-950 mt-8 mb-2">Conclusion</h3>
       <p>
-        By recycling instances sequentially and gating each node swap behind a custom health check validation loop, we successfully mitigate latency spikes and bad gateway errors, maintaining a 100% successful request rate during upgrades.
+        This cryptographic aggregation allows universities to anchor thousands of records in a single transaction block. Relying parties verify academic credentials directly, guaranteeing authenticity without requesting database access.
       </p>
     </article>
   ),
-  "traefik-routing-rules": (
+  "preventing-certificate-tampering": (
     <article className="space-y-6 text-neutral-600 text-sm md:text-base leading-relaxed">
       <p>
-        Traefik is a modern reverse proxy designed for containerized setups. In our architecture, it plays a vital role as the dynamic routing layer that translates container promotions into seamless user request shifts.
+        In academic credential systems, preventing unauthorized alterations or retrospective modifications is critical. Trueva's Proof-of-Authority (PoA) consensus mechanism guarantees state consistency across all participating nodes.
       </p>
-      <h3 className="text-lg font-bold text-neutral-950 mt-8 mb-2">How Traefik Handles the Swap</h3>
+      <h3 className="text-lg font-bold text-neutral-950 mt-8 mb-2">How Consensus Protects State</h3>
       <p>
-        Because Traefik monitors provider APIs (such as Docker, Consul, or Azure tag states) dynamically, it automatically registers new instances and updates its routing table when VMs report health changes:
+        The consensus protocol acts as an active integrity auditor:
       </p>
       <ul className="list-disc list-inside space-y-2">
-        <li><strong>Dynamic Discovery:</strong> Traefik listens for Scale Set telemetry, mapping backend servers to frontend routers.</li>
-        <li><strong>Hitless Grace Periods:</strong> When an instance goes into draining mode, Traefik immediately stops routing new requests, allowing existing requests to terminate gracefully without connection resets.</li>
-        <li><strong>Health Gating:</strong> Traefik's active health checks verify that new instances are return codes of 200 OK before they are added to the load-balancing pool.</li>
+        <li><strong>Authorized Signatures:</strong> Only blocks proposed by registered issuer addresses containing valid ECDSA signatures are accepted.</li>
+        <li><strong>Validator Node Auditing:</strong> When a new block is propagated, validators perform pre-flight consensus checks. They verify signature formats and cross-check the Merkle Root hash against transaction records.</li>
+        <li><strong>Byzantine Fault Rejection:</strong> If a compromised node attempts to broadcast a block containing tampered records or duplicate transactions, the validation signature checks fail. The network immediately rejects the block, alerts RPC load balancers, and re-syncs the nodes to the last honest block.</li>
       </ul>
       <p>
-        This hot-swapping configuration acts as the load-balancer shield, protecting user sessions from the underlying virtual machine re-provisioning loop.
+        This fail-safe validation checks and automatically isolates malicious actors, guaranteeing 100% cryptographic ledger integrity.
       </p>
     </article>
   ),
-  "automatic-rollback-triggers": (
+  "scalable-verification-rpc-gateways": (
     <article className="space-y-6 text-neutral-600 text-sm md:text-base leading-relaxed">
       <p>
-        Automation without a recovery plan is high risk. Our blue-green rollout pipeline features automated rollback gates to revert fleet configurations instantly if runtime anomalies occur.
+        Serving verification requests at scale requires high-performance RPC infrastructure. Trueva separates block creation logic from query routing, deploying RPC gateway load-balancers to manage high validation traffic.
       </p>
-      <h3 className="text-lg font-bold text-neutral-950 mt-8 mb-2">Synthetic Health Checks</h3>
+      <h3 className="text-lg font-bold text-neutral-950 mt-8 mb-2">High-Throughput Verification Architecture</h3>
       <p>
-        The pipeline anchor script doesn't just check for TCP connection success. It calls synthetic transactions on specialized API endpoints:
+        The RPC Gateway Layer ensures sub-120ms verification responses globally:
       </p>
       <ul className="list-disc list-inside space-y-2">
-        <li><strong>Internal Dependencies:</strong> Verifies active database connections and caching layers return valid responses.</li>
-        <li><strong>Error Rate Monitoring:</strong> Monitors Traefik logs for any spikes in HTTP 5xx codes during the transition.</li>
-        <li><strong>Automatic Fallback:</strong> If a synthetic check fails on the updated nodes, the script aborts the rollout, instantly swaps Traefik back to 100% stable old nodes, and sends alerting telemetry.</li>
+        <li><strong>Dynamic Validator Routing:</strong> The gateway tracks block height status of all validator pool nodes. It redirects verification requests only to nodes reporting fully synchronized states.</li>
+        <li><strong>Cache Gating:</strong> Since Merkle roots are immutable, verified roots are cached at the edge. The gateway validates Merkle proofs instantly, bypassing database queries.</li>
+        <li><strong>Dynamic Scalability:</strong> If incoming validation traffic spikes, the autoscaling controller provisions additional read-only verifier nodes, attaching them to the RPC pool to maintain low latency.</li>
       </ul>
       <p>
-        This safeguards production environments by ensuring that faulty code updates are rolled back in under 10 seconds, before users notice any degradation.
+        This separation of validator node consensus and RPC query load balances network resources, maintaining high availability for institutions and employers globally.
       </p>
     </article>
   )
@@ -131,7 +131,7 @@ export default function BlogPostDetail({ params }: { params: Promise<{ slug: str
 
           {/* Author/Footer callout */}
           <div className="border border-neutral-200/60 rounded-xl p-5 bg-[#FAF9F6] flex justify-between items-center gap-4 text-xs font-semibold text-neutral-500">
-            <span>Written by csn2.me Infra Team</span>
+            <span>Written by csn2.me Registry Team</span>
             <Link href="/" className="text-accent flex items-center gap-1">
               Back to Home <ArrowRight size={12} />
             </Link>

@@ -17,7 +17,7 @@ export default function StatsStrip() {
               100%
             </span>
             <span className="text-[10px] md:text-xs font-semibold text-neutral-400 uppercase tracking-wider">
-              Zero-Downtime Deploys
+              Cryptographic Integrity
             </span>
           </div>
 
@@ -27,7 +27,7 @@ export default function StatsStrip() {
               {state.stats.avgPromoTime}
             </span>
             <span className="text-[10px] md:text-xs font-semibold text-neutral-400 uppercase tracking-wider">
-              Average Promotion Time
+              Verification Latency
             </span>
           </div>
 
@@ -37,7 +37,7 @@ export default function StatsStrip() {
               {state.stats.manualRollbacks}
             </span>
             <span className="text-[10px] md:text-xs font-semibold text-neutral-400 uppercase tracking-wider">
-              Manual Rollbacks Needed
+              Tamper Attempts Blocked
             </span>
           </div>
 
@@ -47,7 +47,7 @@ export default function StatsStrip() {
               {state.stats.currentUptime}
             </span>
             <span className="text-[10px] md:text-xs font-semibold text-neutral-400 uppercase tracking-wider">
-              Fleet Current Uptime
+              Network Consensus SLA
             </span>
           </div>
 

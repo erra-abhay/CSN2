@@ -52,24 +52,24 @@ export default function Hero() {
 
     switch (state.status) {
       case "idle":
-        return `Stable production fleet running ${activeV}. All 6 instances healthy.`;
+        return `Decentralized ledger running stable at block ${activeV}. All 6 primary validator nodes synced.`;
       case "building":
-        return `Triggered pipeline. Building container image for ${targetV}...`;
+        return `Batch Anchoring triggered. Hashing credentials and building Merkle Tree for ${targetV}...`;
       case "verifying":
-        return `Verifying image tags for ${targetV}-staging. Running container tests...`;
+        return `Verifying cryptographic signature on ${targetV}. Auditing Merkle proof path...`;
       case "rolling":
         const drainedCount = state.instances.filter(i => i.status === "healthy-new" || i.status === "creating").length;
-        return `Recycling Scale Set: rolling update in progress. ${drainedCount} of 6 instances upgraded.`;
+        return `Consensus propagation in progress. ${drainedCount} of 6 validators verified and updated to block ${targetV}.`;
       case "swapping":
-        return `Traffic swap initiated. Swapping Traefik routes: ${activeV} (0%) -> ${targetV} (100%).`;
+        return `State transition proposed. Reconfiguring routing tables: ${activeV} → ${targetV} (100% agreement).`;
       case "completed":
-        return `Rollout #${targetV} complete. 6 of 6 instances recycled. Zero downtime.`;
+        return `Block #${targetV} committed successfully. All 6 nodes synchronized. Zero validation delay.`;
       case "rolling-back":
-        return `CRITICAL: Health failure detected. Auto-rollback initiated: reverting traffic split to ${targetV}...`;
+        return `CRITICAL: Block signature mismatch detected. Consensus failed. Reverting to last honest block ${targetV}...`;
       case "rolled-back":
-        return `Pipeline rolled back to stable ${activeV}. 0 manual interventions needed.`;
+        return `Ledger state restored back to stable block ${activeV}. Malicious transaction successfully isolated.`;
       default:
-        return `System checking status...`;
+        return `Auditing network status...`;
     }
   };
 
@@ -86,26 +86,26 @@ export default function Hero() {
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-neutral-200/60 rounded-full shadow-[0_2px_10px_rgba(0,0,0,0.02)] mb-8">
           <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
           <span className="text-xs font-semibold tracking-wide text-neutral-600 uppercase">
-            An infrastructure experiment · Azure auto-scaling
+            Decentralized Trust Network · Immutable Verification
           </span>
         </div>
 
         {/* Giant headline */}
         <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-neutral-900 leading-[1.08] mb-6 max-w-3xl mx-auto">
-          Ship to production.
+          Cryptographic Trust.
           <span className="block mt-2">
-            Never break it{" "}
-            <span className="text-accent font-black drop-shadow-sm">again.</span>
+            Instantly{" "}
+            <span className="text-accent font-black drop-shadow-sm">verified.</span>
           </span>
         </h1>
 
         {/* Subtitle */}
         <p className="text-base md:text-lg text-neutral-600 max-w-2xl mx-auto leading-relaxed mb-10">
-          csn2.me is a live testbed for a zero-downtime blue-green deployment pipeline. 
-          New container images are built and promoted, an auto-scaling fleet of Azure virtual machines 
-          recycles itself instance by instance, and Traefik load balancers swap traffic with zero dropped requests.
+          csn2.me is a public live demonstration of Trueva's decentralized validator network and verification registry. 
+          Certificate hashes are signed, batched into Merkle Trees, and anchored onto a PoA blockchain. 
+          Query nodes distribute verification traffic dynamically, rejecting tampered records in real-time.
           <span className="block mt-2 font-semibold text-neutral-800">
-            You push the image. The fleet rolls itself.
+            Instant verifiability. Zero reliance on central authorities.
           </span>
         </p>
 
@@ -116,13 +116,13 @@ export default function Hero() {
             className="w-full sm:w-auto px-8 py-4 bg-neutral-900 hover:bg-neutral-800 text-white font-semibold rounded-full shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer active:scale-98"
           >
             <Play size={15} fill="currentColor" />
-            Watch a live deploy
+            Watch Live Sync
           </button>
           <button
             onClick={handleScrollToArch}
             className="w-full sm:w-auto px-8 py-4 bg-transparent hover:bg-neutral-100/50 text-neutral-800 font-semibold rounded-full flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer"
           >
-            Read the architecture
+            Read Technical Specs
             <ArrowRight size={16} />
           </button>
         </div>
@@ -133,24 +133,24 @@ export default function Hero() {
             {/* Header row */}
             <div className="flex items-center justify-between border-b border-neutral-100 pb-4 mb-4">
               <div className="flex items-center gap-2.5 flex-wrap">
-                <span className="text-sm font-bold text-neutral-800">acadhub-api</span>
+                <span className="text-sm font-bold text-neutral-800">Trueva Registry (TCR)</span>
                 <span className="text-xs font-medium text-neutral-400">·</span>
                 <span className="px-2 py-0.5 bg-neutral-100 text-neutral-600 rounded text-[10px] font-mono font-bold uppercase">
-                  production
+                  mainnet-proof
                 </span>
                 <span className="text-xs font-medium text-neutral-400">·</span>
                 <span className="text-xs font-mono font-medium text-neutral-500">
-                  rollout #{state.status === "idle" ? "v128" : state.targetVersion}
+                  Block #{state.status === "idle" ? "blk-4820" : state.targetVersion}
                 </span>
                 <span className="text-xs font-medium text-neutral-400">·</span>
                 <span className="text-xs font-mono text-neutral-400 font-medium">
-                  host: <span className="text-neutral-650 font-bold">{state.hostname}</span>
+                  node: <span className="text-neutral-650 font-bold">{state.hostname}</span>
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <span className={`w-2 h-2 rounded-full ${getStatusColor()}`} />
                 <span className="text-xs font-semibold text-neutral-600 capitalize">
-                  {state.status === "idle" ? "live" : state.status.replace("-", " ")}
+                  {state.status === "idle" ? "synced" : state.status.replace("-", " ")}
                 </span>
               </div>
             </div>
@@ -159,14 +159,14 @@ export default function Hero() {
             <div className="flex items-center gap-2 mb-3">
               <CheckCircle2 className="text-status-green w-4 h-4 shrink-0" />
               <span className="text-xs font-semibold text-neutral-800">
-                {state.status === "building" ? "Image building — waiting for verification" : "Image promoted — both staging & prod tags verified"}
+                {state.status === "building" ? "Hashing credentials — building Merkle Root" : "Merkle Root committed — signature verified by all nodes"}
               </span>
             </div>
 
             {/* Real-time description update */}
             <div className="flex items-start gap-3 bg-neutral-50 rounded-xl p-3.5 border border-neutral-100">
               <div className="w-6 h-6 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-[10px] font-black text-accent shrink-0 mt-0.5">
-                c2
+                t2
               </div>
               <div className="flex-1 text-xs leading-normal text-neutral-700 font-medium">
                 {getStatusText()}
@@ -175,7 +175,7 @@ export default function Hero() {
                 onClick={() => setShowTimeline(true)}
                 className="text-xs font-semibold text-accent hover:text-accent-hover transition-colors whitespace-nowrap shrink-0 mt-0.5 cursor-pointer underline decoration-dotted"
               >
-                View timeline
+                View Ledger Logs
               </button>
             </div>
           </div>
@@ -209,7 +209,7 @@ export default function Hero() {
               <div className="px-5 py-4 border-b border-neutral-850 flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
                   <Terminal size={16} className="text-accent" />
-                  <span className="font-bold text-sm text-white">Pipeline Execution Logs</span>
+                  <span className="font-bold text-sm text-white">Decentralized Registry Log Stream</span>
                 </div>
                 <button
                   onClick={() => setShowTimeline(false)}
@@ -223,12 +223,12 @@ export default function Hero() {
               <div className="p-5 font-mono text-xs leading-relaxed max-h-[350px] overflow-y-auto no-scrollbar flex flex-col gap-2">
                 {state.logs.map((log, index) => {
                   let colorClass = "text-neutral-400";
-                  if (log.includes("[System]")) colorClass = "text-blue-400";
-                  if (log.includes("[HealthCheck]")) colorClass = "text-emerald-400";
+                  if (log.includes("[Chain]")) colorClass = "text-blue-400";
+                  if (log.includes("[Consensus]")) colorClass = "text-emerald-400";
                   if (log.includes("[Registry]")) colorClass = "text-cyan-400";
-                  if (log.includes("[Pipeline]")) colorClass = "text-indigo-400 text-bold";
-                  if (log.includes("[AutoScaler]")) colorClass = "text-amber-400";
-                  if (log.includes("CRITICAL") || log.includes("failure")) colorClass = "text-red-400 font-bold";
+                  if (log.includes("[HashEngine]")) colorClass = "text-indigo-400 text-bold";
+                  if (log.includes("[Gateway]")) colorClass = "text-amber-400";
+                  if (log.includes("CRITICAL") || log.includes("failed")) colorClass = "text-red-400 font-bold";
 
                   return (
                     <div key={index} className={`${colorClass} whitespace-pre-wrap`}>
@@ -239,7 +239,7 @@ export default function Hero() {
                 {state.status !== "idle" && state.status !== "completed" && state.status !== "rolled-back" && (
                   <div className="flex items-center gap-2 text-accent animate-pulse mt-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-accent animate-ping" />
-                    <span>Pipeline processing event...</span>
+                    <span>Consensus protocol processing event...</span>
                   </div>
                 )}
               </div>
@@ -247,7 +247,7 @@ export default function Hero() {
               {/* Footer */}
               <div className="px-5 py-3.5 bg-neutral-950 border-t border-neutral-850 flex items-center justify-between text-[11px] text-neutral-500">
                 <span>Active Target: {state.targetVersion}</span>
-                <span>Traefik: v128 (100% stable)</span>
+                <span>Gateway RPC: Synced</span>
               </div>
             </motion.div>
           </div>

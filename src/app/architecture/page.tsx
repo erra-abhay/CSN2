@@ -27,79 +27,73 @@ export default function ArchitectureDeepDive() {
               Technical Specification
             </span>
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-neutral-900 mt-4 mb-6">
-              Deployment Architecture Deep Dive
+              Trueva Technical Architecture
             </h1>
             <p className="text-neutral-600 text-base md:text-lg leading-relaxed max-w-3xl">
-              This document outlines the actual mechanics of the zero-downtime blue-green deployment pipeline 
-              currently running on Azure, governing VM scale sets and proxy splits.
+              This document outlines the cryptographic mechanics of the certificate trust network running on the Trueva validator registry.
             </p>
           </div>
 
           {/* Content Sections */}
           <div className="space-y-12 mb-20">
             
-            {/* Section 1: Blue-Green Pipeline Logic */}
+            {/* Section 1: Merkle tree */}
             <div className="bg-white border border-neutral-200/50 rounded-2xl p-6 md:p-8 shadow-sm">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center text-accent">
                   <Terminal size={16} />
                 </div>
                 <h2 className="text-xl font-bold text-neutral-900">
-                  1. Blue-Green Rollout Logic
+                  1. Merkle Tree & Batch Anchoring
                 </h2>
               </div>
               
               <p className="text-xs md:text-sm text-neutral-600 leading-relaxed mb-6 font-medium">
-                Instead of running two parallel fleets, this system implements an in-place rolling blue-green upgrade within a single Azure VM Scale Set. This model minimizes infrastructure costs while maintaining 100% service availability.
+                Instead of anchoring each certificate individually—which is slow and public-exposing—Trueva aggregates multiple records into a single Merkle Tree. Only the single cryptographic root hash is committed to the blockchain, protecting privacy while proving existence.
               </p>
 
               <div className="bg-neutral-900 rounded-xl p-4 font-mono text-[11px] text-neutral-400 leading-relaxed border border-neutral-800">
                 <div className="text-neutral-500 border-b border-neutral-800 pb-2 mb-2 uppercase tracking-wider text-[9px] font-bold">
-                  deployment_orchestration.sh
+                  trueva_cert_anchor.sh
                 </div>
                 <pre className="overflow-x-auto whitespace-pre-wrap no-scrollbar">
-{`# 1. Promote new image tag in ACR
-az acr repository tag create --name acadhubacr \\
-  --tag acadhub-api:v129-production acadhub-api:v129-staging
+{`# 1. Generate SHA-256 hash for document metadata
+sha256sum student_degree_payload.json > cert_hash.txt
 
-# 2. Sequential VM instance recycling loop
-for instance_id in $(az vmss list-instances --name acadhub-fleet --query "[].instanceId" -o tsv); do
-  echo "Draining connections from instance: $instance_id..."
-  # Tell Traefik to stop sending requests to this instance
-  curl -X POST http://traefik-proxy/api/drain/$instance_id
-  sleep 5
-  
-  echo "Upgrading instance: $instance_id..."
-  az vmss update-instances --name acadhub-fleet --instance-ids $instance_id
-  
-  # Gate rollout on health check validation
-  until curl -f -s http://instance-$instance_id/health; do
-    echo "Waiting for instance health checks..."
-    sleep 2
-  done
+# 2. Build Merkle Tree root from directory of hashes
+node build_merkle_tree.js --hashes ./cert_hashes/ --out merkle_root.json
+
+# 3. Anchor Merkle Root to Smart Contract Registry
+cast send $TRUEVA_REGISTRY_CONTRACT "anchorRoot(bytes32)" $MERKLE_ROOT \\
+  --private-key $ISSUER_PRIVATE_KEY
+
+# 4. Sync validator nodes
+for validator_ip in $(trueva-cli list-validators); do
+  echo "Broadcasting updated block height to node at $validator_ip..."
+  curl -X POST -d @new_block.json http://$validator_ip/api/consensus/sync
 done`}
                 </pre>
               </div>
             </div>
 
-            {/* Section 2: Load Balancing Split */}
+            {/* Section 2: Consensus */}
             <div className="bg-white border border-neutral-200/50 rounded-2xl p-6 md:p-8 shadow-sm">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center text-accent">
                   <Shield size={16} />
                 </div>
                 <h2 className="text-xl font-bold text-neutral-900">
-                  2. Traefik Routing Configuration
+                  2. Signature Auditing & BFT Consensus
                 </h2>
               </div>
               
               <p className="text-xs md:text-sm text-neutral-600 leading-relaxed mb-4 font-medium">
-                Traefik acts as the reverse proxy and load balancer. Because VMs register themselves dynamically via tag-based service discovery, Traefik routes incoming requests only to instances reporting a 200 OK health status.
+                Before a block is appended to the ledger, validator nodes execute consensus verification. Each validator audits the proposed state block against registered keys.
               </p>
 
               <ul className="space-y-3 text-xs md:text-sm text-neutral-600 font-medium list-disc list-inside">
-                <li><strong className="text-neutral-850">TCP Session Draining:</strong> Connection draining ensures active user sessions are completed on the old container version before the instance is stopped.</li>
-                <li><strong className="text-neutral-850">Gated Verification:</strong> If a single VM reports a failure code during provisioning, the script stops the fleet rollout and triggers an automatic rollback of all modified instances back to the stable tag.</li>
+                <li><strong className="text-neutral-850">Cryptographic Identity:</strong> Validators check that the proposed root signature matches the authorized issuer public key registered in the Smart Contract.</li>
+                <li><strong className="text-neutral-850">Byzantine Fault Tolerance:</strong> If any validator node attempts to broadcast a block containing tampered hashes, the consensus protocol fails signature checks, rejects the block proposal, and isolates the offending node.</li>
               </ul>
             </div>
 
@@ -110,12 +104,12 @@ done`}
                   <Server size={16} />
                 </div>
                 <h2 className="text-xl font-bold text-neutral-900">
-                  3. High-Availability SLA
+                  3. Verification Gateway API
                 </h2>
               </div>
               
               <p className="text-xs md:text-sm text-neutral-600 leading-relaxed font-medium">
-                During a typical rollout, AcadHub achieves a 100% successful request rate. Average upgrade duration scales linearly with the number of instances, taking approximately 41 seconds for a full 6-node fleet recycle.
+                Trueva uses a load-balanced RPC gateway layer. Verification queries are routed dynamically to synchronized validator nodes. Each validation query requires only an O(log N) Merkle path proof check, returning audit logs in under 120 milliseconds.
               </p>
             </div>
 

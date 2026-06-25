@@ -17,28 +17,28 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
-    slug: "azure-scale-sets-blue-green",
-    title: "Zero-Downtime Rollouts on Azure VM Scale Sets",
-    excerpt: "How to configure Azure Scale Sets to recycle instances one by one behind a reverse proxy, achieving a hitless release pipeline.",
+    slug: "decentralized-credential-verification",
+    title: "Decentralized Credential Verification: Merkle Trees & Cryptographic Proofs",
+    excerpt: "How to compile certificate metadata into Merkle Tree root hashes to enable zero-knowledge proofs and fast verification checks without central authority dependencies.",
     date: "June 24, 2026",
     readingTime: "5 min read",
-    tag: "Azure Infrastructure"
+    tag: "Cryptography"
   },
   {
-    slug: "traefik-routing-rules",
-    title: "Hot-Swapping Traffic Splits Using Traefik",
-    excerpt: "Deep dive into configuring Traefik's dynamic routing parameters to seamlessly transition live traffic between stable and staging container ports.",
+    slug: "preventing-certificate-tampering",
+    title: "Preventing Certificate Tampering: How Consensus Guards Ledger Integrity",
+    excerpt: "Deep dive into Proof-of-Authority consensus checks, auditing proposed transaction blocks, and isolating malicious nodes attempting state tampering.",
     date: "June 18, 2026",
     readingTime: "4 min read",
-    tag: "Load Balancing"
+    tag: "Consensus Protocols"
   },
   {
-    slug: "automatic-rollback-triggers",
-    title: "Designing Fail-Safe Automated Rollback Gating",
-    excerpt: "Learn how to wire up synthetic health tests to intercept rollout loops, automatically reverting traffic split on anomalies to guarantee 100% SLA.",
+    slug: "scalable-verification-rpc-gateways",
+    title: "Scalable Verification: Architecture of Trueva RPC Gateways",
+    excerpt: "Learn how to build load-balanced RPC node networks to deliver sub-150ms verification latencies while handling heavy verification query volumes.",
     date: "June 10, 2026",
     readingTime: "6 min read",
-    tag: "DevOps"
+    tag: "RPC Infrastructure"
   }
 ];
 
@@ -60,13 +60,13 @@ export default function BlogListing() {
           {/* Header */}
           <div className="mb-16">
             <span className="px-2.5 py-0.5 bg-accent/10 text-accent rounded text-[10px] font-bold tracking-wide uppercase">
-              csn2.me engineering blog
+              Trueva Engineering Chronicles
             </span>
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-neutral-900 mt-4 mb-6">
-              Infrastructure Engineering Chronicles
+              Decentralized Trust & Ledger Systems
             </h1>
             <p className="text-neutral-600 text-base md:text-lg leading-relaxed max-w-3xl">
-              Deep dives, lessons learned, and system logs from running our auto-scaling blue-green deployments on Azure.
+              Deep dives, lessons learned, and cryptographic specifications from building Trueva's high-throughput certificate verification ledger.
             </p>
           </div>
 

@@ -44,12 +44,12 @@ interface DeploymentContextProps {
 }
 
 const initialInstances: VMInstance[] = [
-  { id: "vm-0", status: "healthy-old", version: "v128", ip: "10.0.0.4" },
-  { id: "vm-1", status: "healthy-old", version: "v128", ip: "10.0.0.5" },
-  { id: "vm-2", status: "healthy-old", version: "v128", ip: "10.0.0.6" },
-  { id: "vm-3", status: "healthy-old", version: "v128", ip: "10.0.0.7" },
-  { id: "vm-4", status: "healthy-old", version: "v128", ip: "10.0.0.8" },
-  { id: "vm-5", status: "healthy-old", version: "v128", ip: "10.0.0.9" },
+  { id: "node-0", status: "healthy-old", version: "blk-4820", ip: "10.0.8.21" },
+  { id: "node-1", status: "healthy-old", version: "blk-4820", ip: "10.0.8.22" },
+  { id: "node-2", status: "healthy-old", version: "blk-4820", ip: "10.0.8.23" },
+  { id: "node-3", status: "healthy-old", version: "blk-4820", ip: "10.0.8.24" },
+  { id: "node-4", status: "healthy-old", version: "blk-4820", ip: "10.0.8.25" },
+  { id: "node-5", status: "healthy-old", version: "blk-4820", ip: "10.0.8.26" },
 ];
 
 const DeploymentContext = createContext<DeploymentContextProps | undefined>(undefined);
@@ -57,21 +57,21 @@ const DeploymentContext = createContext<DeploymentContextProps | undefined>(unde
 export function DeploymentProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<DeploymentState>({
     status: "idle",
-    activeVersion: "v128",
-    targetVersion: "v128",
+    activeVersion: "blk-4820",
+    targetVersion: "blk-4820",
     instances: initialInstances,
     logs: [
-      "[08:00:00] [System] Fleet initialized. Running version v128.",
-      "[08:00:01] [Traefik] Traefik routing 100% traffic to v128 scale set.",
-      "[08:00:02] [HealthCheck] All 6 VM instances report healthy. Ready.",
+      "[08:00:00] [Chain] Network initialized. Current block: blk-4820.",
+      "[08:00:01] [Consensus] Proof-of-Authority (PoA) consensus active. 6 validators online.",
+      "[08:00:02] [Registry] TCR Contract verified. Standing by for certificate batches.",
     ],
     activeScenario: null,
     hostname: "detecting...",
     stats: {
       successRate: "100%",
-      avgPromoTime: "41s",
+      avgPromoTime: "120ms",
       manualRollbacks: 0,
-      currentUptime: "99.998%",
+      currentUptime: "99.999%",
     },
   });
 
@@ -118,32 +118,32 @@ export function DeploymentProvider({ children }: { children: React.ReactNode }) 
     setState((prev) => ({
       ...prev,
       status: "building",
-      targetVersion: "v129",
+      targetVersion: "blk-4821",
       activeScenario: "promotion",
-      instances: prev.instances.map(inst => ({ ...inst, status: "healthy-old", version: "v128" })),
-      logs: [`[${new Date().toLocaleTimeString("en-US", { hour12: false })}] [Pipeline] Initializing rollout #129...`],
+      instances: prev.instances.map(inst => ({ ...inst, status: "healthy-old", version: "blk-4820" })),
+      logs: [`[${new Date().toLocaleTimeString("en-US", { hour12: false })}] [Registry] Initializing certificate batch anchoring #4821...`],
     }));
 
     let step = 0;
     const runSimulation = () => {
       step++;
       if (step === 1) {
-        addLog("[Registry] Building Docker image for target version v129...");
+        addLog("[HashEngine] Generating SHA-256 hashes for 42 new certificates...");
         timerRef.current = setTimeout(runSimulation, 2000);
       } else if (step === 2) {
-        addLog("[Registry] Docker build complete. Image size: 138MB.");
-        addLog("[Registry] Pushing image tag: acadhub-api:v129-staging");
+        addLog("[HashEngine] Built Merkle Tree. Merkle Root: 0x5d9b62f183ae439ca25...");
+        addLog("[Registry] Generating Ed25519 signature from Trueva Issuer Authority key...");
         setState(prev => ({ ...prev, status: "verifying" }));
         timerRef.current = setTimeout(runSimulation, 2500);
       } else if (step === 3) {
-        addLog("[HealthCheck] Gated test: checking v129-staging on isolated container...");
-        addLog("[HealthCheck] Verification successful. Response code: 200 OK.");
-        addLog("[Registry] Promoting tag: acadhub-api:v129-staging -> acadhub-api:v129-production");
+        addLog("[Consensus] Gated pre-flight check: validating transaction payload structure...");
+        addLog("[Consensus] Signature verified. State transition valid.");
+        addLog("[Registry] Broadcasting block blk-4821 to validator network...");
         timerRef.current = setTimeout(runSimulation, 2000);
       } else if (step === 4) {
-        addLog("[Pipeline] Rolling fleet deployment initiated. Recycling 6 VM instances...");
+        addLog("[Consensus] Block propagation initiated. Syncing 6 validator nodes...");
         setState(prev => ({ ...prev, status: "rolling" }));
-        // Start recycling VMs one by one
+        // Start recycling/syncing nodes one by one
         recycleVM(0);
       }
     };
@@ -151,55 +151,55 @@ export function DeploymentProvider({ children }: { children: React.ReactNode }) 
     const recycleVM = (index: number) => {
       if (index >= 6) {
         // Fleet rolled! Now swap traffic
-        addLog("[Pipeline] All 6 VM instances recycled successfully with version v129-production.");
+        addLog("[Consensus] All 6 validator nodes successfully synchronized block blk-4821.");
         setState(prev => ({ ...prev, status: "swapping" }));
         timerRef.current = setTimeout(() => {
-          addLog("[Traefik] Reconfiguring load balancer routing rules...");
-          addLog("[Traefik] Swapping traffic split: v128 (0%) -> v129 (100%).");
-          addLog("[Traefik] Hot-swap completed without dropped requests.");
+          addLog("[Gateway] Reconfiguring RPC load balancer routing rules...");
+          addLog("[Gateway] Directing query traffic to block height blk-4821 registry.");
+          addLog("[Gateway] State sync completed. 0 latency penalty.");
           
           setState(prev => ({
             ...prev,
             status: "completed",
-            activeVersion: "v129",
+            activeVersion: "blk-4821",
             stats: {
               ...prev.stats,
               successRate: "100%",
-              avgPromoTime: "39s",
+              avgPromoTime: "115ms",
             }
           }));
-          addLog("[System] Rollout v129-production fully live. Fleet healthy.");
+          addLog("[Chain] Block blk-4821 committed. 42 certificates live.");
         }, 2000);
         return;
       }
 
-      // Transition VM to draining
+      // Transition node to syncing (draining)
       setState(prev => {
         const newInst = [...prev.instances];
         newInst[index] = { ...newInst[index], status: "draining" };
         return { ...prev, instances: newInst };
       });
-      addLog(`[VM-Set] Draining active traffic connections from vm-${index}...`);
+      addLog(`[Network] Transitioning node-${index} to receiving mode...`);
 
       timerRef.current = setTimeout(() => {
-        // Transition VM to creating
+        // Transition node to validating (creating)
         setState(prev => {
           const newInst = [...prev.instances];
-          newInst[index] = { ...newInst[index], status: "creating", version: "v129" };
+          newInst[index] = { ...newInst[index], status: "creating", version: "blk-4821" };
           return { ...prev, instances: newInst };
         });
-        addLog(`[VM-Set] Re-provisioning vm-${index} with image tag v129-production...`);
+        addLog(`[Network] Propagating block metadata to node-${index}...`);
 
         timerRef.current = setTimeout(() => {
-          // Transition VM to healthy-new
+          // Transition node to synced (healthy-new)
           setState(prev => {
             const newInst = [...prev.instances];
             newInst[index] = { ...newInst[index], status: "healthy-new" };
             return { ...prev, instances: newInst };
           });
-          addLog(`[HealthCheck] vm-${index} reporting healthy on v129-production.`);
+          addLog(`[Consensus] node-${index} verified and appended block blk-4821.`);
           
-          // Move to next VM after a small delay
+          // Move to next node after a small delay
           timerRef.current = setTimeout(() => recycleVM(index + 1), 800);
         }, 1200);
       }, 1000);
@@ -215,38 +215,37 @@ export function DeploymentProvider({ children }: { children: React.ReactNode }) 
     setState((prev) => ({
       ...prev,
       activeScenario: "scaleout",
-      logs: [`[${new Date().toLocaleTimeString("en-US", { hour12: false })}] [AutoScaler] High load alert: CPU utilization > 82% on average.`],
+      logs: [`[${new Date().toLocaleTimeString("en-US", { hour12: false })}] [Gateway] Traffic Alert: Verification API query volume spiked > 4,200 reqs/sec.`],
     }));
 
     let step = 0;
     const runSimulation = () => {
       step++;
       if (step === 1) {
-        addLog("[AutoScaler] Auto-scale rule triggered: Provisioning 2 additional VM instances...");
+        addLog("[Gateway] Dynamic Scale Rule Triggered: Provisioning 2 additional verifier nodes...");
         setState(prev => ({
           ...prev,
           instances: [
             ...prev.instances,
-            { id: "vm-6", status: "creating", version: prev.activeVersion, ip: "10.0.0.10" },
-            { id: "vm-7", status: "creating", version: prev.activeVersion, ip: "10.0.0.11" },
+            { id: "node-6", status: "creating", version: prev.activeVersion, ip: "10.0.8.27" },
+            { id: "node-7", status: "creating", version: prev.activeVersion, ip: "10.0.8.28" },
           ]
         }));
         timerRef.current = setTimeout(runSimulation, 2000);
       } else if (step === 2) {
-        addLog("[VM-Set] VM instances vm-6 and vm-7 provisioned successfully.");
-        addLog("[HealthCheck] Verifying vm-6 health checks...");
-        addLog("[HealthCheck] Verifying vm-7 health checks...");
+        addLog("[Network] Verifier nodes node-6 and node-7 successfully booted.");
+        addLog("[Consensus] Syncing node-6 with active ledger block state...");
+        addLog("[Consensus] Syncing node-7 with active ledger block state...");
         timerRef.current = setTimeout(runSimulation, 2000);
       } else if (step === 3) {
         setState(prev => ({
           ...prev,
           instances: prev.instances.map(inst => 
-            inst.id === "vm-6" || inst.id === "vm-7" ? { ...inst, status: prev.activeVersion === "v128" ? "healthy-old" : "healthy-new" } : inst
+            inst.id === "node-6" || inst.id === "node-7" ? { ...inst, status: prev.activeVersion === "blk-4820" ? "healthy-old" : "healthy-new" } : inst
           )
         }));
-        addLog("[HealthCheck] Both instances healthy. Attaching to Traefik pool.");
-        addLog("[Traefik] Load balancer pool updated: 8 instances active. Traffic redistributed.");
-        addLog("[AutoScaler] Scale out complete. Average CPU dropped to 48%.");
+        addLog("[Consensus] Both nodes synchronized. Attaching to RPC Gateway load balancer pool.");
+        addLog("[Gateway] Gateway routing pool expanded. Traffic load balanced. Average query latency stabilized at 120ms.");
         setState(prev => ({ ...prev, activeScenario: null }));
       }
     };
@@ -260,31 +259,30 @@ export function DeploymentProvider({ children }: { children: React.ReactNode }) 
     setState((prev) => ({
       ...prev,
       status: "rolling-back",
-      targetVersion: "v128",
+      targetVersion: "blk-4820",
       activeScenario: "rollback",
-      logs: [`[${new Date().toLocaleTimeString("en-US", { hour12: false })}] [Pipeline] Rollback drill initiated. Reverting fleet to v128...`],
+      logs: [`[${new Date().toLocaleTimeString("en-US", { hour12: false })}] [Consensus] Consensus Audit Triggered. Reviewing block candidate...`],
     }));
 
     let step = 0;
     const runSimulation = () => {
       step++;
       if (step === 1) {
-        addLog("[HealthCheck] Gated test: Health check failure simulation triggered on v129.");
-        addLog("[Pipeline] CRITICAL: Automatic rollback threshold exceeded. Reverting traffic split...");
+        addLog("[Consensus] Verifying state signature: validating transaction block payload...");
+        addLog("[Consensus] CRITICAL: Invalid signature detected on validator node-3 (mismatched root hash).");
         timerRef.current = setTimeout(runSimulation, 2000);
       } else if (step === 2) {
-        addLog("[Traefik] Reconfiguring load balancer routing rules...");
-        addLog("[Traefik] Swapping traffic split: v129 (0%) -> v128 (100%).");
-        addLog("[Traefik] Traffic hot-swapped back to stable v128 fleet.");
+        addLog("[Gateway] Alert: Fraudulent block proposal rejected. Isolating malicious transaction...");
+        addLog("[Gateway] Reverting API routing registry back to stable block height blk-4820.");
         setState(prev => ({ ...prev, status: "swapping" }));
         timerRef.current = setTimeout(runSimulation, 1500);
       } else if (step === 3) {
-        addLog("[Pipeline] Restoring VM instances configuration to v128-production...");
+        addLog("[Network] Restoring all validator node states to consensus height blk-4820...");
         setState(prev => ({
           ...prev,
           status: "rolling",
           instances: prev.instances.map(inst => 
-            inst.id.startsWith("vm") ? { ...inst, status: "creating", version: "v128" } : inst
+            inst.id.startsWith("node") ? { ...inst, status: "creating", version: "blk-4820" } : inst
           )
         }));
         timerRef.current = setTimeout(runSimulation, 2500);
@@ -292,18 +290,18 @@ export function DeploymentProvider({ children }: { children: React.ReactNode }) 
         setState(prev => ({
           ...prev,
           status: "rolled-back",
-          activeVersion: "v128",
-          instances: prev.instances.filter(inst => inst.id !== "vm-6" && inst.id !== "vm-7").map(inst => ({
+          activeVersion: "blk-4820",
+          instances: prev.instances.filter(inst => inst.id !== "node-6" && inst.id !== "node-7").map(inst => ({
             ...inst,
             status: "healthy-old",
-            version: "v128"
+            version: "blk-4820"
           })),
           stats: {
             ...prev.stats,
             manualRollbacks: prev.stats.manualRollbacks + 1
           }
         }));
-        addLog("[System] Rollback completed. Stable version v128-production restored on all 6 primary instances.");
+        addLog("[Chain] Consensus restored. Stable ledger block height blk-4820 successfully synced across all nodes.");
       }
     };
 
@@ -314,21 +312,21 @@ export function DeploymentProvider({ children }: { children: React.ReactNode }) 
     clearTimers();
     setState((prev) => ({
       status: "idle",
-      activeVersion: "v128",
-      targetVersion: "v128",
+      activeVersion: "blk-4820",
+      targetVersion: "blk-4820",
       instances: initialInstances,
       logs: [
-        "[08:00:00] [System] Fleet initialized. Running version v128.",
-        "[08:00:01] [Traefik] Traefik routing 100% traffic to v128 scale set.",
-        "[08:00:02] [HealthCheck] All 6 VM instances report healthy. Ready.",
+        "[08:00:00] [Chain] Network initialized. Current block: blk-4820.",
+        "[08:00:01] [Consensus] Proof-of-Authority (PoA) consensus active. 6 validators online.",
+        "[08:00:02] [Registry] TCR Contract verified. Standing by for certificate batches.",
       ],
       activeScenario: null,
       hostname: prev.hostname,
       stats: {
         successRate: "100%",
-        avgPromoTime: "41s",
+        avgPromoTime: "120ms",
         manualRollbacks: 0,
-        currentUptime: "99.998%",
+        currentUptime: "99.999%",
       },
     }));
   };
