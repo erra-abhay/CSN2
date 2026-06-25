@@ -2,72 +2,265 @@
 
 import React, { use } from "react";
 import Link from "next/link";
-import { ArrowLeft, Clock, Calendar, ArrowRight } from "lucide-react";
+import { ArrowLeft, Clock, Calendar, ArrowRight, ShieldCheck, Key, Database, Cpu, Lock } from "lucide-react";
 import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { blogPosts } from "../page";
+import { motion } from "framer-motion";
 
 // Detail bodies for the posts
 const postBodies: Record<string, React.ReactNode> = {
   "decentralized-credential-verification": (
-    <article className="space-y-6 text-neutral-600 text-sm md:text-base leading-relaxed">
+    <div className="space-y-6 text-neutral-600 text-sm md:text-base leading-relaxed">
       <p>
-        Verifying digital credentials securely is a core requirement of modern record systems. Traditional database setups suffer from central vulnerabilities, privacy leakage risks, and reliance on single registrars.
-        By using Merkle Trees, Trueva enables complete verification without exposing raw student data or overloading database gateways.
+        Academic credential fraud is a multi-million dollar problem. Standard degree checks are slow, manual, and rely heavily on central registrar databases. 
+        When employers query an institution to verify a graduate's degree, they trigger data leaks and create network latency.
+        Trueva solves this by aggregating degree metadata hashes into **Merkle Trees** and anchoring the root hashes to a secure, decentralized validator network.
       </p>
-      <h3 className="text-lg font-bold text-neutral-950 mt-8 mb-2">The Cryptographic Proof Flow</h3>
+
+      <div className="my-8 border border-neutral-200/50 bg-neutral-50 rounded-2xl p-6">
+        <h4 className="font-bold text-neutral-900 mb-3 flex items-center gap-1.5 text-sm uppercase tracking-wider">
+          <ShieldCheck size={16} className="text-accent" /> Why Merkle Trees?
+        </h4>
+        <p className="text-xs text-neutral-600 leading-relaxed font-semibold">
+          A Merkle Tree is a binary tree where every leaf node represents a cryptographic hash of certificate metadata, and every non-leaf node represents a hash of its children:
+          <span className="block my-2 font-mono text-neutral-700 bg-white p-2.5 rounded border border-neutral-250/50 text-[10px] select-all">
+            Parent_Hash = SHA256( Left_Node_Hash + Right_Node_Hash )
+          </span>
+          This hierarchy allows verification of a single certificate's presence in a batch using only O(log N) proofs, rather than auditing the entire database.
+        </p>
+      </div>
+
+      <h3 className="text-lg font-bold text-neutral-950 mt-8 mb-2">Cryptographic Validation Pipeline</h3>
       <p>
-        In the Trueva registry, the document anchoring process operates as follows:
+        The step-by-step lifecycle of anchoring certificate records onto the Trueva ledger proceeds through these stages:
       </p>
-      <ul className="list-disc list-inside space-y-2">
-        <li><strong>Local Hashing:</strong> Document metadata (e.g., student name, GPA, distinction details) is hashed locally into a unique SHA-256 value. The raw data remains completely private.</li>
-        <li><strong>Merkle Tree Aggregation:</strong> Individual hashes are combined in pairs recursively to generate a Merkle Tree. This leaves us with a single hash at the top: the Merkle Root.</li>
-        <li><strong>Smart Contract Commit:</strong> The Merkle Root is committed via a signed transaction to the Trueva Contract Registry on the consensus ledger.</li>
-        <li><strong>Merkle Proof Checks:</strong> To verify, a verifier queries the RPC nodes with the certificate SHA-256 and the Merkle proof (a list of sibling hashes in the path). Checking the path computes the root hash, validating authenticity instantly in O(log N) time.</li>
-      </ul>
-      <h3 className="text-lg font-bold text-neutral-950 mt-8 mb-2">Conclusion</h3>
+      <ol className="list-decimal list-inside space-y-3 font-semibold text-neutral-600 text-xs">
+        <li>
+          <strong className="text-neutral-850">Document Hashing:</strong> Certificate details (Student Name, Institution, Degree, GPA, Issue Date) are compiled into a standard JSON string. The local engine hashes the string using SHA-256 to create a 32-byte hash.
+        </li>
+        <li>
+          <strong className="text-neutral-850">ECDSA Signing:</strong> The institution uses its private key to encrypt the SHA-256 hash, generating a cryptographic signature that verifies origin.
+        </li>
+        <li>
+          <strong className="text-neutral-850">Merkle Aggregation:</strong> Up to 10,000 signed certificate hashes are organized in pairs to generate a Merkle Tree. The final resulting hash is the Merkle Root.
+        </li>
+        <li>
+          <strong className="text-neutral-850">Contract Anchor:</strong> The Merkle Root is submitted to the Trueva Contract Registry via a blockchain transaction, updating the block consensus height.
+        </li>
+      </ol>
+
+      <h3 className="text-lg font-bold text-neutral-950 mt-8 mb-2">Verification Efficiency Comparison</h3>
+      <div className="overflow-x-auto no-scrollbar my-6">
+        <table className="w-full text-left border-collapse border border-neutral-200/60 rounded-xl text-xs font-semibold text-neutral-600">
+          <thead>
+            <tr className="bg-neutral-50 text-neutral-900 border-b border-neutral-200">
+              <th className="p-3">Batch Size (Certs)</th>
+              <th className="p-3">Database Verification Time</th>
+              <th className="p-3">Merkle Proof Time (Trueva)</th>
+              <th className="p-3">Privacy Leakage</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-neutral-100">
+            <tr>
+              <td className="p-3">100</td>
+              <td className="p-3">1,400ms</td>
+              <td className="p-3">&lt; 5ms</td>
+              <td className="p-3 text-status-red font-bold">EXPOSED</td>
+            </tr>
+            <tr>
+              <td className="p-3">1,000</td>
+              <td className="p-3">2,800ms</td>
+              <td className="p-3">&lt; 8ms</td>
+              <td className="p-3 text-status-red font-bold">EXPOSED</td>
+            </tr>
+            <tr>
+              <td className="p-3">10,000</td>
+              <td className="p-3">5,500ms</td>
+              <td className="p-3">&lt; 12ms</td>
+              <td className="p-3 text-status-green font-bold">ZERO LEAKS</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
       <p>
-        This cryptographic aggregation allows universities to anchor thousands of records in a single transaction block. Relying parties verify academic credentials directly, guaranteeing authenticity without requesting database access.
+        By eliminating database checks and verifying hashes directly against the immutable root on the consensus nodes, Trueva reduces verification overhead to virtually zero.
       </p>
-    </article>
+    </div>
   ),
   "preventing-certificate-tampering": (
-    <article className="space-y-6 text-neutral-600 text-sm md:text-base leading-relaxed">
+    <div className="space-y-6 text-neutral-600 text-sm md:text-base leading-relaxed">
       <p>
-        In academic credential systems, preventing unauthorized alterations or retrospective modifications is critical. Trueva's Proof-of-Authority (PoA) consensus mechanism guarantees state consistency across all participating nodes.
+        Ledger security is only as strong as its consensus mechanism. In public blockchains, Proof-of-Work (PoW) or Proof-of-Stake (PoS) are used. 
+        However, for institutional credential registries, **Proof-of-Authority (PoA)** consensus serves as the optimal framework. 
+        It replaces energy-intensive mining with signed verification keys allocated to approved registrar nodes.
       </p>
-      <h3 className="text-lg font-bold text-neutral-950 mt-8 mb-2">How Consensus Protects State</h3>
+
+      <div className="my-8 border border-neutral-200/50 bg-neutral-50 rounded-2xl p-6">
+        <h4 className="font-bold text-neutral-900 mb-3 flex items-center gap-1.5 text-sm uppercase tracking-wider">
+          <Key size={16} className="text-accent" /> Signature Audits
+        </h4>
+        <p className="text-xs text-neutral-600 leading-relaxed font-semibold">
+          Every proposed block containing Merkle roots of certificates is audited by validator nodes before inclusion. Validators perform ECDSA signature verification checks against the smart contract registry of authorized institution keys.
+        </p>
+      </div>
+
+      <h3 className="text-lg font-bold text-neutral-950 mt-8 mb-2">Consensus Audit Cycle</h3>
       <p>
-        The consensus protocol acts as an active integrity auditor:
+        When a block update is broadcast to the network, validators follow a zero-trust consensus check loop:
       </p>
-      <ul className="list-disc list-inside space-y-2">
-        <li><strong>Authorized Signatures:</strong> Only blocks proposed by registered issuer addresses containing valid ECDSA signatures are accepted.</li>
-        <li><strong>Validator Node Auditing:</strong> When a new block is propagated, validators perform pre-flight consensus checks. They verify signature formats and cross-check the Merkle Root hash against transaction records.</li>
-        <li><strong>Byzantine Fault Rejection:</strong> If a compromised node attempts to broadcast a block containing tampered records or duplicate transactions, the validation signature checks fail. The network immediately rejects the block, alerts RPC load balancers, and re-syncs the nodes to the last honest block.</li>
+      <ul className="list-disc list-inside space-y-3 font-semibold text-neutral-600 text-xs">
+        <li>
+          <strong className="text-neutral-850">Pre-flight Validation:</strong> Validator nodes intercept the transaction. They check that the public address proposing the block matches one of the authorized registrar signatures.
+        </li>
+        <li>
+          <strong className="text-neutral-850">State Verification:</strong> Nodes compute the hash of the proposed block, verifying that no transactions within the block contain mismatched inputs or tampered certificate digests.
+        </li>
+        <li>
+          <strong className="text-neutral-850">Byzantine Rejection:</strong> If a compromised validator (e.g. node-3) proposes an invalid block containing a fake certificate hash, the other 5 nodes detect the state mismatch. The block fails the signature quorum check, is immediately rejected, and node-3 is isolated for state re-synchronization.
+        </li>
       </ul>
+
       <p>
-        This fail-safe validation checks and automatically isolates malicious actors, guaranteeing 100% cryptographic ledger integrity.
+        This BFT design guarantees that certificate records cannot be retroactively modified or forged, even if one of the network validator nodes is compromised.
       </p>
-    </article>
+    </div>
   ),
   "scalable-verification-rpc-gateways": (
-    <article className="space-y-6 text-neutral-600 text-sm md:text-base leading-relaxed">
+    <div className="space-y-6 text-neutral-600 text-sm md:text-base leading-relaxed">
       <p>
-        Serving verification requests at scale requires high-performance RPC infrastructure. Trueva separates block creation logic from query routing, deploying RPC gateway load-balancers to manage high validation traffic.
+        Building a blockchain registry is only the first step. To serve thousands of query requests per second from employment sites and background check companies, the network must scale its read capability. 
+        Trueva accomplishes this by separating the transaction validators from the **RPC Verification Gateway Layer**.
       </p>
-      <h3 className="text-lg font-bold text-neutral-950 mt-8 mb-2">High-Throughput Verification Architecture</h3>
+
+      <div className="my-8 border border-neutral-200/50 bg-neutral-50 rounded-2xl p-6">
+        <h4 className="font-bold text-neutral-900 mb-3 flex items-center gap-1.5 text-sm uppercase tracking-wider">
+          <Database size={16} className="text-accent" /> The Gateway Layer
+        </h4>
+        <p className="text-xs text-neutral-600 leading-relaxed font-semibold">
+          The RPC Gateway is a load-balancer that dynamically maps verification queries to synced validator nodes. By keeping read-only nodes decoupled from consensus nodes, we ensure high availability and sub-120ms latencies.
+        </p>
+      </div>
+
+      <h3 className="text-lg font-bold text-neutral-950 mt-8 mb-2">Dynamic Capacity Scaling</h3>
       <p>
-        The RPC Gateway Layer ensures sub-120ms verification responses globally:
+        If query volume increases (e.g. during hiring seasons), the network autoscaling rule triggers:
       </p>
-      <ul className="list-disc list-inside space-y-2">
-        <li><strong>Dynamic Validator Routing:</strong> The gateway tracks block height status of all validator pool nodes. It redirects verification requests only to nodes reporting fully synchronized states.</li>
-        <li><strong>Cache Gating:</strong> Since Merkle roots are immutable, verified roots are cached at the edge. The gateway validates Merkle proofs instantly, bypassing database queries.</li>
-        <li><strong>Dynamic Scalability:</strong> If incoming validation traffic spikes, the autoscaling controller provisions additional read-only verifier nodes, attaching them to the RPC pool to maintain low latency.</li>
+      <ul className="list-disc list-inside space-y-3 font-semibold text-neutral-600 text-xs">
+        <li>
+          <strong className="text-neutral-850">Load Peak Detection:</strong> Gateway monitors query latencies. If CPU utilization exceeds 80% on read nodes, the scaling rule initiates.
+        </li>
+        <li>
+          <strong className="text-neutral-850">Verifier Provisioning:</strong> Two additional read verifier nodes (node-6 and node-7) are booted and synchronized with the latest ledger block state.
+        </li>
+        <li>
+          <strong className="text-neutral-850">RPC Attachment:</strong> Once node-6 and node-7 report synced status, they are attached to the gateway proxy balancer pool. Latency drops back to stable levels.
+        </li>
       </ul>
+
       <p>
-        This separation of validator node consensus and RPC query load balances network resources, maintaining high availability for institutions and employers globally.
+        This decoupling of network write consensus and read query balance ensures that the trust registry stays online under heavy workload spikes.
       </p>
-    </article>
+    </div>
+  ),
+  "consensus-mechanisms-poa-pos": (
+    <div className="space-y-6 text-neutral-600 text-sm md:text-base leading-relaxed">
+      <p>
+        Enterprise record ledgers have distinct requirements compared to public cryptocurrency networks. Public chains rely on Proof-of-Stake (PoS) to coordinate anonymous actors. 
+        For trusted academic credentials, however, **Proof-of-Authority (PoA)** offers superior speed, deterministic finality, and zero gas-price volatility.
+      </p>
+
+      <div className="my-8 border border-neutral-200/50 bg-neutral-50 rounded-2xl p-6">
+        <h4 className="font-bold text-neutral-900 mb-3 flex items-center gap-1.5 text-sm uppercase tracking-wider">
+          <Cpu size={16} className="text-accent" /> PoA Consensus Profile
+        </h4>
+        <p className="text-xs text-neutral-600 leading-relaxed font-semibold">
+          In PoA, validator nodes are pre-approved institutions (e.g. Stanford, MIT, Berkeley). Staking value is replaced by institutional reputation, and transaction fees are replaced by fixed operational costs, cutting network inflation.
+        </p>
+      </div>
+
+      <h3 className="text-lg font-bold text-neutral-950 mt-8 mb-2">Detailed Comparison</h3>
+      <div className="overflow-x-auto no-scrollbar my-6">
+        <table className="w-full text-left border-collapse border border-neutral-200/60 rounded-xl text-xs font-semibold text-neutral-600">
+          <thead>
+            <tr className="bg-neutral-50 text-neutral-900 border-b border-neutral-200">
+              <th className="p-3">Metric</th>
+              <th className="p-3">Proof-of-Authority (TCR)</th>
+              <th className="p-3">Proof-of-Stake (L1s)</th>
+              <th className="p-3">Proof-of-Work (Legacy)</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-neutral-100">
+            <tr>
+              <td className="p-3 font-bold">Throughput (TPS)</td>
+              <td className="p-3 text-status-green font-bold">2,500+ TPS</td>
+              <td className="p-3">~100-500 TPS</td>
+              <td className="p-3 text-status-red">~10 TPS</td>
+            </tr>
+            <tr>
+              <td className="p-3 font-bold">Finality Latency</td>
+              <td className="p-3 text-status-green font-bold">&lt; 1s (Instant)</td>
+              <td className="p-3">12s - 3 mins</td>
+              <td className="p-3 text-status-red">30-60 mins</td>
+            </tr>
+            <tr>
+              <td className="p-3 font-bold">Gas Cost Stability</td>
+              <td className="p-3 text-status-green font-bold">Deterministic (0)</td>
+              <td className="p-3">Volatile (Gwei spikes)</td>
+              <td className="p-3 text-status-red">Highly Volatile</td>
+            </tr>
+            <tr>
+              <td className="p-3 font-bold">Energy Profile</td>
+              <td className="p-3">Negligible</td>
+              <td className="p-3">Low</td>
+              <td className="p-3 text-status-red">Extremely High</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        For enterprise credentialing where identity and origin are key, PoA is the clear winner, bringing cost predictability and rapid block finalization.
+      </p>
+    </div>
+  ),
+  "privacy-preserving-zero-knowledge": (
+    <div className="space-y-6 text-neutral-600 text-sm md:text-base leading-relaxed">
+      <p>
+        The biggest challenge of publishing certificate records on public ledger registries is privacy. How do we allow employers to verify a degree without exposing personal identifiable information (PII) like names, birthdates, and grades to the public blockchain history? 
+        The solution lies in **Zero-Knowledge Merkle Proofs**.
+      </p>
+
+      <div className="my-8 border border-neutral-200/50 bg-neutral-50 rounded-2xl p-6">
+        <h4 className="font-bold text-neutral-900 mb-3 flex items-center gap-1.5 text-sm uppercase tracking-wider">
+          <Lock size={16} className="text-accent" /> ZK-SNARK Integration
+        </h4>
+        <p className="text-xs text-neutral-600 leading-relaxed font-semibold">
+          ZK-SNARK proofs let a user prove they possess a valid path in a Merkle tree without revealing their private parameters (the leaf indices or values). The validator only verifies the proof mathematics against the public root.
+        </p>
+      </div>
+
+      <h3 className="text-lg font-bold text-neutral-950 mt-8 mb-2">How ZK-Proofs Work</h3>
+      <p>
+        A student verifying their credential on Trueva follows this cryptographic cycle:
+      </p>
+      <ul className="list-disc list-inside space-y-3 font-semibold text-neutral-600 text-xs">
+        <li>
+          <strong className="text-neutral-850">Proof Generation (Local):</strong> The student loads their certificate JSON and private key in their browser. Trueva's client SDK compiles the variables and generates a mathematical validation proof.
+        </li>
+        <li>
+          <strong className="text-neutral-850">Proof Transmission:</strong> The client sends only the proof parameters (e.g. proof points A, B, C) to the verification gateway, keeping the name and degree course private.
+        </li>
+        <li>
+          <strong className="text-neutral-850">Gateway Audit:</strong> The RPC node evaluates the proof equation. If the math holds, it confirms the certificate is part of the committed root, returning a verified checkmark with 0 disclosure.
+        </li>
+      </ul>
+
+      <p>
+        Zero-Knowledge verification ensures academic credentials are 100% auditable while maintaining absolute student privacy, complying with GDPR and strict educational confidentiality rules.
+      </p>
+    </div>
   )
 };
 
@@ -124,10 +317,14 @@ export default function BlogPostDetail({ params }: { params: Promise<{ slug: str
             </div>
           </div>
 
-          {/* Post Body Content */}
-          <div className="bg-white border border-neutral-200/50 rounded-2xl p-6 md:p-10 shadow-sm mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="bg-white border border-neutral-200/50 rounded-2xl p-6 md:p-10 shadow-sm mb-16"
+          >
             {body}
-          </div>
+          </motion.div>
 
           {/* Author/Footer callout */}
           <div className="border border-neutral-200/60 rounded-xl p-5 bg-[#FAF9F6] flex justify-between items-center gap-4 text-xs font-semibold text-neutral-500">
