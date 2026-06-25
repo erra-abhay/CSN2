@@ -1,0 +1,279 @@
+"use client";
+
+import React, { useState } from "react";
+import { Users, Shield, Server, FolderGit2, Anchor, HelpCircle, Sparkles } from "lucide-react";
+import { useDeployment } from "@/lib/deployment-store";
+
+interface NodeDetails {
+  title: string;
+  subtitle: string;
+  description: string;
+  details: string[];
+}
+
+export default function Architecture() {
+  const { state } = useDeployment();
+  const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
+
+  const nodes: Record<string, NodeDetails> = {
+    registry: {
+      title: "Container Registry",
+      subtitle: "Azure Container Registry (ACR)",
+      description: "Stores compiled application container images. Manages staging and production tags.",
+      details: [
+        "Immutable tags prevent runtime conflicts.",
+        "Image promotion copies the staging tag reference to the production tag.",
+        "Triggers zero VM package rebuilds during deploy."
+      ]
+    },
+    fleet: {
+      title: "Auto-Scaling Fleet",
+      subtitle: "Virtual Machine Scale Set (VMSS)",
+      description: "A scaling group of identical stateless VM instances running the production application container.",
+      details: [
+        "Scales out from 6 up to 10 instances on CPU spikes.",
+        "Instances are ephemeral; they drain connections before recycling.",
+        "Runs Traefik agent to report health states dynamically."
+      ]
+    },
+    anchor: {
+      title: "Deployment Anchor",
+      subtitle: "Dedicated VM (Isolated Network)",
+      description: "Runs orchestrator scripts that monitor the production registry tag and trigger upgrades.",
+      details: [
+        "Executes blue-green rolling upgrade scripts safely.",
+        "Triggers sequential VM re-provisions.",
+        "Ensures rollbacks execute instantly if a VM health check fails."
+      ]
+    },
+    proxy: {
+      title: "Traefik Reverse Proxy",
+      subtitle: "Traefik Routing Layer",
+      description: "Modern reverse proxy directing incoming user requests to the healthy instance pool.",
+      details: [
+        "Dynamically reads VM configuration updates.",
+        "Executes hitless hot-swaps between old and new version sets.",
+        "Applies strict health-check gating parameters."
+      ]
+    },
+    users: {
+      title: "End Users",
+      subtitle: "Production Traffic Load",
+      description: "Real web users sending active requests to acadhub/csn2.me.",
+      details: [
+        "Experience 100% service uptime during transitions.",
+        "Zero HTTP 502/503 bad gateway codes.",
+        "Latency spikes are completely mitigated via TCP session draining."
+      ]
+    }
+  };
+
+  const getTooltipContent = () => {
+    if (!activeTooltip || !nodes[activeTooltip]) return null;
+    const node = nodes[activeTooltip];
+    return (
+      <div className="bg-neutral-900 border border-neutral-800 text-neutral-300 rounded-xl p-5 shadow-lg animate-fade-in">
+        <h4 className="text-sm font-bold text-white mb-0.5">{node.title}</h4>
+        <span className="text-[10px] font-semibold text-accent font-mono block mb-3 uppercase tracking-wider">
+          {node.subtitle}
+        </span>
+        <p className="text-xs text-neutral-400 leading-relaxed mb-3">
+          {node.description}
+        </p>
+        <ul className="space-y-1.5 text-[11px] text-neutral-500 list-disc list-inside">
+          {node.details.map((detail, idx) => (
+            <li key={idx}>{detail}</li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
+
+  return (
+    <section id="architecture" className="py-24 bg-white border-t border-neutral-200/40 scroll-mt-20">
+      <div className="max-w-7xl mx-auto px-6">
+        
+        {/* Headings */}
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-neutral-900 mb-4">
+            System Architecture
+          </h2>
+          <p className="text-neutral-600 text-sm md:text-base max-w-xl mx-auto">
+            Interactive system flow. Tap or hover over any architectural node to view details of its operations.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
+          
+          {/* Left / Center: Dynamic Visual Diagram */}
+          <div className="lg:col-span-3 bg-[#FAF9F6] border border-neutral-200/50 rounded-2xl p-8 shadow-sm flex flex-col justify-between min-h-[460px]">
+            <div className="mb-8 flex items-center justify-between">
+              <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider">
+                Interactive Fleet Topology
+              </span>
+              <span className="text-[10px] text-neutral-500 font-semibold flex items-center gap-1">
+                <HelpCircle size={12} className="text-neutral-400" /> Hover node to view details
+              </span>
+            </div>
+
+            {/* Topology Flowchart */}
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-4 relative py-6">
+              
+              {/* Connecting line backgrounds */}
+              <div className="hidden md:block absolute top-1/2 left-[10%] right-[10%] h-[1px] bg-neutral-200/80 -translate-y-1/2 -z-10" />
+
+              {/* Node 1: Container Registry */}
+              <button
+                onMouseEnter={() => setActiveTooltip("registry")}
+                onClick={() => setActiveTooltip("registry")}
+                className={`w-full md:w-36 bg-white border rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm cursor-pointer transition-all duration-200 hover:border-accent hover:-translate-y-0.5 focus:outline-none ${
+                  activeTooltip === "registry" ? "border-accent ring-2 ring-accent/10" : "border-neutral-200/60"
+                }`}
+              >
+                <FolderGit2 className="text-accent mb-2.5 w-6 h-6" />
+                <span className="text-xs font-bold text-neutral-800">Container Registry</span>
+                <span className="text-[9px] text-neutral-400 mt-0.5 font-mono">ACR v128 / v129</span>
+              </button>
+
+              {/* Arrow */}
+              <div className="hidden md:block text-neutral-400 font-black">→</div>
+
+              {/* Node 2: VM Scale Set Fleet */}
+              <button
+                onMouseEnter={() => setActiveTooltip("fleet")}
+                onClick={() => setActiveTooltip("fleet")}
+                className={`w-full md:w-44 bg-white border rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm cursor-pointer transition-all duration-200 hover:border-accent hover:-translate-y-0.5 focus:outline-none ${
+                  activeTooltip === "fleet" ? "border-accent ring-2 ring-accent/10" : "border-neutral-200/60"
+                }`}
+              >
+                <Server className="text-accent mb-2.5 w-6 h-6" />
+                <span className="text-xs font-bold text-neutral-800">VM Scale Set Fleet</span>
+                <span className="text-[9px] text-neutral-400 mt-0.5 font-mono">6 VM Instances</span>
+                
+                {/* Micro indicators representing VM state in real-time */}
+                <div className="flex gap-1.5 mt-3 justify-center">
+                  {state.instances.slice(0, 6).map((inst) => {
+                    let dotColor = "bg-neutral-300";
+                    if (inst.status === "healthy-old") dotColor = "bg-neutral-800";
+                    if (inst.status === "healthy-new") dotColor = "bg-status-green";
+                    if (inst.status === "creating" || inst.status === "draining") dotColor = "bg-status-amber animate-pulse";
+                    return <span key={inst.id} className={`w-1.5 h-1.5 rounded-full ${dotColor}`} />;
+                  })}
+                </div>
+              </button>
+
+              {/* Arrow */}
+              <div className="hidden md:block text-neutral-400 font-black">→</div>
+
+              {/* Node 3: Traefik Proxy */}
+              <button
+                onMouseEnter={() => setActiveTooltip("proxy")}
+                onClick={() => setActiveTooltip("proxy")}
+                className={`w-full md:w-36 bg-white border rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm cursor-pointer transition-all duration-200 hover:border-accent hover:-translate-y-0.5 focus:outline-none ${
+                  activeTooltip === "proxy" ? "border-accent ring-2 ring-accent/10" : "border-neutral-200/60"
+                }`}
+              >
+                <Shield className="text-accent mb-2.5 w-6 h-6" />
+                <span className="text-xs font-bold text-neutral-800">Traefik Proxy</span>
+                <span className="text-[9px] text-neutral-400 mt-0.5 font-mono">Hot-Swap Layer</span>
+              </button>
+
+              {/* Arrow */}
+              <div className="hidden md:block text-neutral-400 font-black">→</div>
+
+              {/* Node 4: End Users */}
+              <button
+                onMouseEnter={() => setActiveTooltip("users")}
+                onClick={() => setActiveTooltip("users")}
+                className={`w-full md:w-36 bg-white border rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm cursor-pointer transition-all duration-200 hover:border-accent hover:-translate-y-0.5 focus:outline-none ${
+                  activeTooltip === "users" ? "border-accent ring-2 ring-accent/10" : "border-neutral-200/60"
+                }`}
+              >
+                <Users className="text-accent mb-2.5 w-6 h-6" />
+                <span className="text-xs font-bold text-neutral-800">End Users</span>
+                <span className="text-[9px] text-neutral-400 mt-0.5 font-mono">Incoming Traffic</span>
+              </button>
+            </div>
+
+            {/* Anchor Machine Connection Card (Sits under VM scale set) */}
+            <div className="flex flex-col md:flex-row justify-center items-center gap-2 mt-4">
+              <button
+                onMouseEnter={() => setActiveTooltip("anchor")}
+                onClick={() => setActiveTooltip("anchor")}
+                className={`w-full md:w-56 bg-neutral-900 border rounded-2xl p-4 flex items-center gap-3 text-left shadow-sm cursor-pointer transition-all duration-200 hover:border-accent focus:outline-none text-white ${
+                  activeTooltip === "anchor" ? "border-accent ring-2 ring-accent/10" : "border-neutral-850"
+                }`}
+              >
+                <Anchor className="text-accent w-5 h-5 shrink-0" />
+                <div>
+                  <span className="text-xs font-bold block text-white">Deployment Anchor</span>
+                  <span className="text-[9px] text-neutral-500 font-mono">Runs blue-green script</span>
+                </div>
+              </button>
+            </div>
+
+            {/* Interactive Tooltip Output Box */}
+            <div className="mt-8 min-h-[140px] flex flex-col justify-center">
+              {activeTooltip ? (
+                getTooltipContent()
+              ) : (
+                <div className="text-center py-6 text-neutral-400 text-xs font-medium border border-dashed border-neutral-200 rounded-xl">
+                  Hover or tap any architectural node above to drill down into logs & operational metadata.
+                </div>
+              )}
+            </div>
+
+          </div>
+
+          {/* Right: "What's Next" Side Panel */}
+          <div className="bg-[#FAF9F6] border border-neutral-200/50 rounded-2xl p-6 shadow-sm min-h-[460px] flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-2 text-neutral-800 font-bold text-sm uppercase tracking-wider mb-6">
+                <Sparkles size={16} className="text-accent" />
+                What&apos;s Next
+              </div>
+
+              <div className="space-y-6">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="px-2 py-0.5 bg-accent/10 text-accent rounded text-[8px] font-bold tracking-wide uppercase">
+                      Exploring
+                    </span>
+                  </div>
+                  <h4 className="text-xs font-bold text-neutral-950 mb-1">
+                    Dual-Fleet Blue-Green
+                  </h4>
+                  <p className="text-[11px] leading-relaxed text-neutral-600 font-medium">
+                    Provision two complete parallel Scale Set groups (Active & Staging) rather than swapping instances inside one fleet, which cuts deployment time in half.
+                  </p>
+                </div>
+
+                <div className="h-[1px] bg-neutral-200/60 w-full" />
+
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="px-2 py-0.5 bg-accent/10 text-accent rounded text-[8px] font-bold tracking-wide uppercase">
+                      Exploring
+                    </span>
+                  </div>
+                  <h4 className="text-xs font-bold text-neutral-950 mb-1">
+                    Native Canary Rollouts
+                  </h4>
+                  <p className="text-[11px] leading-relaxed text-neutral-600 font-medium">
+                    Upgrade VMs natively via scale set canary policies. Traefik distributes 10% traffic to the first new VM, running validations before recycling the remaining fleet.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 text-[10px] text-neutral-400 leading-normal font-medium">
+              Explore the source deployment scripts inside the secondary architecture documentation.
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+  );
+}

@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+:root {
+  --background: #faf8f5; /* Warm off-white cream/paper tone */
+  --foreground: #121212; /* Premium charcoal black */
+  
+  --accent: #0052ff; /* Vibrant electric blue */
+  --accent-hover: #0041cc;
+  
+  --status-green: #10b981;
+  --status-amber: #f59e0b;
+  --status-red: #ef4444;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  
+  --color-status-green: var(--status-green);
+  --color-status-amber: var(--status-amber);
+  --color-status-red: var(--status-red);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
+  --animate-gradient-slow: gradient-shift 15s ease infinite;
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes gradient-shift {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+}
+
+/* Custom resets and body styling */
+html, body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom shadow utilities for premium feel */
+.shadow-premium {
+  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.03),
+              0 15px 30px -10px rgba(0, 0, 0, 0.04),
+              0 0 0 1px rgba(0, 0, 0, 0.02);
+}
+
+.shadow-premium-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.shadow-premium-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 40px 80px -15px rgba(0, 0, 0, 0.05),
+              0 20px 40px -10px rgba(0, 0, 0, 0.06),
+              0 0 0 1px rgba(0, 0, 0, 0.03);
+}
+
+/* Focus styles for keyboard navigation accessibility */
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
