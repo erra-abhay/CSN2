@@ -492,11 +492,11 @@ export default function Masterclass() {
             <div className="bg-white border border-neutral-200/60 rounded-2xl p-5 shadow-sm space-y-4 lg:order-1">
               {/* Keys display */}
               <div className="space-y-1.5 font-mono text-[9px]">
-                <div className="bg-neutral-950 text-neutral-450 p-2.5 rounded-lg border border-neutral-850">
+                <div className="bg-neutral-950 text-neutral-400 p-2.5 rounded-lg border border-neutral-850">
                   <span className="block text-accent font-bold mb-0.5 uppercase text-[7px] tracking-wider">Registrar Private Key</span>
                   <span className="break-all block font-semibold text-white/90">{privKey.slice(0, 34)}...</span>
                 </div>
-                <div className="bg-neutral-950 text-neutral-450 p-2.5 rounded-lg border border-neutral-850">
+                <div className="bg-neutral-950 text-neutral-400 p-2.5 rounded-lg border border-neutral-850">
                   <span className="block text-neutral-400 font-bold mb-0.5 uppercase text-[7px] tracking-wider">Registrar Public Key</span>
                   <span className="break-all block font-semibold text-white/90">{pubKey.slice(0, 34)}...</span>
                 </div>
@@ -536,7 +536,7 @@ export default function Masterclass() {
               )}
 
               {signatureText && (
-                <div className="bg-neutral-950 text-neutral-450 font-mono text-[9px] p-2.5 rounded-lg border border-neutral-850 max-h-16 overflow-y-auto no-scrollbar">
+                <div className="bg-neutral-950 text-neutral-400 font-mono text-[9px] p-2.5 rounded-lg border border-neutral-850 max-h-16 overflow-y-auto no-scrollbar">
                   <span className="block text-emerald-400 font-bold mb-0.5 uppercase text-[7px] tracking-wider">Generated ECDSA Signature</span>
                   <span className="break-all block font-semibold">{signatureText}</span>
                 </div>
@@ -659,7 +659,7 @@ export default function Masterclass() {
                       (selectedLeafIdx === 3 && idx === 2)
                     );
 
-                    let borderClass = "border-neutral-200 bg-neutral-50 text-neutral-450";
+                    let borderClass = "border-neutral-200 bg-neutral-50 text-neutral-500";
                     if (isTarget) borderClass = "border-amber-400 bg-amber-50/50 text-neutral-950 font-bold ring-1 ring-amber-400/20";
                     if (isSiblingProof) borderClass = "border-status-amber bg-status-amber/10 text-status-amber font-bold ring-1 ring-status-amber/20";
 
@@ -735,7 +735,7 @@ export default function Masterclass() {
 
               {/* Validator Node Grid */}
               <div className="bg-white border border-neutral-200/60 rounded-2xl p-5 shadow-sm space-y-6">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-450 block">Consensus Network Node Dashboard</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 block">Consensus Network Node Dashboard</span>
                 
                 <div className="grid grid-cols-3 gap-3 font-mono text-[9px]">
                   {nodeStates.map((node) => {
@@ -855,14 +855,14 @@ export default function Masterclass() {
             </div>
 
             <div className="bg-white border border-neutral-200/60 rounded-2xl p-5 shadow-sm space-y-4">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-450 block">Cryptographic Standard Specifications</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 block">Cryptographic Standard Specifications</span>
               
               <div className="space-y-3 font-semibold text-neutral-600 text-xs font-sans">
                 <div className="flex items-start gap-3 bg-neutral-50 p-3 rounded-xl border border-neutral-100">
                   <div className="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center text-accent shrink-0 text-[10px] font-bold">W3</div>
                   <div>
                     <h4 className="font-bold text-neutral-900 text-xs mb-0.5">W3C Verifiable Credentials (VC)</h4>
-                    <p className="text-[10px] text-neutral-450 leading-relaxed font-medium">Standard formats for digital certificates containing signed cryptographic data structures.</p>
+                    <p className="text-[10px] text-neutral-500 leading-relaxed font-medium">Standard formats for digital certificates containing signed cryptographic data structures.</p>
                   </div>
                 </div>
 
@@ -870,7 +870,7 @@ export default function Masterclass() {
                   <div className="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center text-accent shrink-0 text-[10px] font-bold">ID</div>
                   <div>
                     <h4 className="font-bold text-neutral-900 text-xs mb-0.5">Decentralized Identifiers (DID)</h4>
-                    <p className="text-[10px] text-neutral-450 leading-relaxed font-medium">Cryptographic URLs identifying registrars, users, and nodes without central registry servers.</p>
+                    <p className="text-[10px] text-neutral-500 leading-relaxed font-medium">Cryptographic URLs identifying registrars, users, and nodes without central registry servers.</p>
                   </div>
                 </div>
 
@@ -878,7 +878,7 @@ export default function Masterclass() {
                   <div className="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center text-accent shrink-0 text-[10px] font-bold">ZK</div>
                   <div>
                     <h4 className="font-bold text-neutral-900 text-xs mb-0.5">ZK-SNARK Proof Circuits</h4>
-                    <p className="text-[10px] text-neutral-450 leading-relaxed font-medium font-semibold">Algorithms verifying membership of hashed degree records in roots with zero leakage of credentials.</p>
+                    <p className="text-[10px] text-neutral-500 leading-relaxed font-medium font-semibold">Algorithms verifying membership of hashed degree records in roots with zero leakage of credentials.</p>
                   </div>
                 </div>
               </div>
@@ -957,7 +957,7 @@ export default function Masterclass() {
               <div className="text-center py-10 space-y-6 font-sans">
                 <CheckCircle className="text-status-green w-16 h-16 mx-auto animate-bounce" />
                 <h4 className="text-2xl font-bold text-white">Masterclass Quiz Completed!</h4>
-                <p className="text-sm text-neutral-450 font-medium max-w-md mx-auto leading-relaxed">
+                <p className="text-sm text-neutral-400 font-medium max-w-md mx-auto leading-relaxed">
                   You scored <span className="font-black text-white text-lg">{quizScore} out of {quizQuestions.length}</span>. You have successfully run through the fundamentals of cryptographic hash algorithms, ECDSA keypairs, Merkle trees, and BFT consensus models.
                 </p>
                 <button

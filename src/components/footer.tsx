@@ -3,6 +3,7 @@
 import React from "react";
 import { useDeployment } from "@/lib/deployment-store";
 import Link from "next/link";
+import { CubeChain } from "./cube-animation";
 
 export default function Footer() {
   const { state } = useDeployment();
@@ -97,8 +98,11 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Abstract 3D Cube Blockchain Joining Animation */}
+        <CubeChain />
+
         {/* Giant wordmark centerpiece */}
-        <div className="select-none text-center py-4 border-t border-neutral-200/40">
+        <div className="select-none text-center py-4 mt-2">
           <h2 className="text-[16vw] font-black tracking-tighter text-[#121212] leading-none select-none uppercase font-sans">
             csn2.me
           </h2>

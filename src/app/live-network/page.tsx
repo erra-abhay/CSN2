@@ -8,6 +8,7 @@ import ClosingCta from "@/components/closing-cta";
 import Link from "next/link";
 import { ArrowLeft, Cpu, Activity, ShieldCheck, Key, Globe, Wifi, Settings } from "lucide-react";
 import { useDeployment } from "@/lib/deployment-store";
+import { FloatingCubesBackground } from "@/components/cube-animation";
 
 export default function LiveNetworkPage() {
   const { state, triggerPromotion } = useDeployment();
@@ -51,7 +52,8 @@ export default function LiveNetworkPage() {
   return (
     <>
       <NavBar />
-      <main className="bg-[#FAF9F6] min-h-screen text-neutral-800 font-sans pt-32 pb-16">
+      <main className="relative bg-[#FAF9F6] min-h-screen text-neutral-800 font-sans pt-32 pb-16 overflow-hidden">
+        <FloatingCubesBackground count={10} />
         <div className="max-w-7xl mx-auto px-6 mb-10 animate-fade-in">
           {/* Back link */}
           <Link

@@ -5,6 +5,7 @@ import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
 import Link from "next/link";
 import { ArrowLeft, Award, CheckCircle, Copy, Key, Loader2, Sparkles, Database, ShieldCheck, Layers, Cpu, ArrowRight, Code, Settings } from "lucide-react";
+import { FloatingCubesBackground } from "@/components/cube-animation";
 
 interface Certificate {
   id: string;
@@ -130,7 +131,8 @@ export default function IssuePage() {
   return (
     <>
       <NavBar />
-      <div className="bg-[#FAF9F6] min-h-screen text-neutral-800 font-sans pt-32 pb-16 px-6">
+      <div className="relative bg-[#FAF9F6] min-h-screen text-neutral-800 font-sans pt-32 pb-16 px-6 overflow-hidden">
+        <FloatingCubesBackground count={10} />
         <div className="max-w-4xl mx-auto">
           {/* Back link */}
           <Link
@@ -170,7 +172,7 @@ export default function IssuePage() {
                 <div className="space-y-4">
                   {/* Selector 1 */}
                   <div>
-                    <label className="block text-[9px] font-bold text-neutral-450 uppercase mb-1">Select Institution</label>
+                    <label className="block text-[9px] font-bold text-neutral-500 uppercase mb-1">Select Institution</label>
                     <select 
                       value={builderSchool}
                       onChange={(e) => setBuilderSchool(e.target.value)}
@@ -184,7 +186,7 @@ export default function IssuePage() {
 
                   {/* Selector 2 */}
                   <div>
-                    <label className="block text-[9px] font-bold text-neutral-450 uppercase mb-1">Select Major Field</label>
+                    <label className="block text-[9px] font-bold text-neutral-500 uppercase mb-1">Select Major Field</label>
                     <select 
                       value={builderMajor}
                       onChange={(e) => setBuilderMajor(e.target.value)}
@@ -231,7 +233,7 @@ export default function IssuePage() {
 
                   {/* Hashing toggle */}
                   <div className="pt-2">
-                    <span className="block text-[9px] font-bold text-neutral-450 uppercase mb-2">Checksum Algorithm</span>
+                    <span className="block text-[9px] font-bold text-neutral-500 uppercase mb-2">Checksum Algorithm</span>
                     <div className="flex gap-2">
                       <button
                         onClick={() => setHashAlgo("SHA-256")}
@@ -384,7 +386,7 @@ export default function IssuePage() {
 
               {/* copy ID card */}
               <div className="bg-[#FAF9F6] border border-neutral-200/50 rounded-2xl p-6 shadow-sm">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-450 mb-2 block">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 mb-2 block">
                   Copy Testing IDs
                 </span>
                 <h3 className="text-sm font-bold text-neutral-900 mb-2">

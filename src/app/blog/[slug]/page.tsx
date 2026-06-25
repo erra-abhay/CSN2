@@ -286,11 +286,11 @@ const postBodies: Record<string, React.ReactNode> = {
         A W3C credential consists of three key nodes: the **Issuer** (Signs the VC), the **Holder** (Stores the VC in a local key wallet), and the **Verifier** (Audits validity against registry nodes).
       </p>
       
-      <div className="bg-neutral-900 rounded-xl p-4 font-mono text-[10px] text-neutral-450 leading-relaxed border border-neutral-800 my-6">
+      <div className="bg-neutral-900 rounded-xl p-4 font-mono text-[10px] text-neutral-300 leading-relaxed border border-neutral-800 my-6">
         <div className="text-neutral-500 border-b border-neutral-800 pb-2 mb-2 uppercase tracking-wider text-[8px] font-bold">
           sample_w3c_credential.json
         </div>
-        <pre className="overflow-x-auto whitespace-pre no-scrollbar">
+        <pre className="overflow-x-auto whitespace-pre no-scrollbar text-neutral-300">
 {`{
   "@context": [
     "https://www.w3.org/2018/credentials/v1",

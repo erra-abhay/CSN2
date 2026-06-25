@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, Cpu, ShieldCheck, Heart, Milestone, Users, Settings, User } from "lucide-react";
 import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
+import { FloatingCubesBackground } from "@/components/cube-animation";
 
 const milestones = [
   {
@@ -64,7 +65,8 @@ export default function AboutPage() {
   return (
     <>
       <NavBar />
-      <div className="bg-[#FAF9F6] min-h-screen text-neutral-800 font-sans pt-32 pb-16 px-6">
+      <div className="relative bg-[#FAF9F6] min-h-screen text-neutral-800 font-sans pt-32 pb-16 px-6 overflow-hidden">
+        <FloatingCubesBackground count={10} />
         <div className="max-w-4xl mx-auto">
           {/* Back Link */}
           <Link
@@ -190,9 +192,9 @@ export default function AboutPage() {
                   }`} />
                   
                   <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                    <span className="text-[10px] font-bold text-neutral-450 uppercase font-mono">{m.quarter}</span>
+                    <span className="text-[10px] font-bold text-neutral-500 uppercase font-mono">{m.quarter}</span>
                     <span className={`px-2 py-0.5 rounded text-[8px] font-bold tracking-wide ${
-                      m.status === "COMPLETED" ? "bg-status-green/10 text-status-green" : m.status === "ACTIVE EXPLORING" ? "bg-status-amber/10 text-status-amber" : "bg-neutral-100 text-neutral-450"
+                      m.status === "COMPLETED" ? "bg-status-green/10 text-status-green" : m.status === "ACTIVE EXPLORING" ? "bg-status-amber/10 text-status-amber" : "bg-neutral-100 text-neutral-500"
                     }`}>
                       {m.status}
                     </span>

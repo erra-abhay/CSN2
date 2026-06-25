@@ -6,6 +6,7 @@ import Footer from "@/components/footer";
 import Link from "next/link";
 import { ArrowLeft, Cpu, Database, Eye, Globe, Key, Search, Server, TrendingUp, BarChart2, Shield } from "lucide-react";
 import { useDeployment } from "@/lib/deployment-store";
+import { FloatingCubesBackground } from "@/components/cube-animation";
 
 interface BlockData {
   height: string;
@@ -116,7 +117,8 @@ export default function ExplorerPage() {
   return (
     <>
       <NavBar />
-      <div className="bg-[#FAF9F6] min-h-screen text-neutral-800 font-sans pt-32 pb-16 px-6">
+      <div className="relative bg-[#FAF9F6] min-h-screen text-neutral-800 font-sans pt-32 pb-16 px-6 overflow-hidden">
+        <FloatingCubesBackground count={10} />
         <div className="max-w-7xl mx-auto">
           {/* Back Link */}
           <Link
@@ -278,10 +280,10 @@ export default function ExplorerPage() {
                   </thead>
                   <tbody className="divide-y divide-neutral-50/50 text-neutral-700 font-mono">
                     {leaderboards.map((lead) => (
-                      <tr key={lead.rank} className="hover:bg-neutral-50/50 transition-colors">
+                      <tr className="hover:bg-neutral-50/50 transition-colors">
                         <td className="py-2.5 font-bold text-neutral-900">#{lead.rank}</td>
                         <td className="py-2.5 font-sans font-bold text-neutral-850">{lead.node}</td>
-                        <td className="py-2.5 text-neutral-450">{lead.region}</td>
+                        <td className="py-2.5 text-neutral-500">{lead.region}</td>
                         <td className="py-2.5 text-center text-neutral-800">{lead.proposals}</td>
                         <td className="py-2.5 text-center text-neutral-800 font-bold">{lead.verified}</td>
                         <td className="py-2.5 text-right text-status-green font-bold">{lead.uptime}</td>
@@ -306,7 +308,7 @@ export default function ExplorerPage() {
               <div className="overflow-x-auto no-scrollbar">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="border-b border-neutral-100 text-[10px] font-bold text-neutral-450 uppercase tracking-wider pb-3">
+                    <tr className="border-b border-neutral-100 text-[10px] font-bold text-neutral-500 uppercase tracking-wider pb-3">
                       <th className="pb-3">Height</th>
                       <th className="pb-3">Block Hash</th>
                       <th className="pb-3 text-center">Tx Count</th>
@@ -321,7 +323,7 @@ export default function ExplorerPage() {
                           {block.hash}
                         </td>
                         <td className="py-4 text-center font-mono font-bold text-neutral-800">{block.txCount}</td>
-                        <td className="py-4 text-right text-neutral-450">{block.timestamp}</td>
+                        <td className="py-4 text-right text-neutral-500">{block.timestamp}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -339,7 +341,7 @@ export default function ExplorerPage() {
               <div className="overflow-x-auto no-scrollbar">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="border-b border-neutral-100 text-[10px] font-bold text-neutral-450 uppercase tracking-wider pb-3">
+                    <tr className="border-b border-neutral-100 text-[10px] font-bold text-neutral-500 uppercase tracking-wider pb-3">
                       <th className="pb-3">Tx Hash</th>
                       <th className="pb-3">Issuer</th>
                       <th className="pb-3 text-center">Initials</th>

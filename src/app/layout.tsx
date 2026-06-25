@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "csn2.me — Trueva Blockchain Certificate Trust",
   description: "A public showcase demonstrating Trueva's decentralized validator network and immutable cryptographic certificate verification registry.",
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default function RootLayout({

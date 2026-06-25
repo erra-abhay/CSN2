@@ -144,7 +144,7 @@ else:
 
               {/* Graphical representation stats */}
               <div className="bg-white border border-neutral-200/50 rounded-2xl p-6 md:p-8 shadow-sm space-y-6">
-                <h3 className="text-sm font-bold text-neutral-450 uppercase tracking-wider mb-2">
+                <h3 className="text-sm font-bold text-neutral-500 uppercase tracking-wider mb-2">
                   Validator Sync Performance Comparison
                 </h3>
                 
@@ -342,7 +342,7 @@ else:
                   </button>
                 </div>
 
-                <div className="text-xs text-neutral-450 leading-relaxed">
+                <div className="text-xs text-neutral-500 leading-relaxed">
                   Refer to the full specification details inside our technical documentation to integrate validation checks.
                 </div>
               </div>
@@ -353,7 +353,7 @@ else:
                   <span className="flex items-center gap-1.5"><Code2 size={12} className="text-accent" /> api_quickstart.{activeTab === "shell" ? "sh" : activeTab === "node" ? "ts" : "py"}</span>
                   <span className="w-1.5 h-1.5 rounded-full bg-status-green" />
                 </div>
-                <pre className="overflow-x-auto whitespace-pre no-scrollbar">
+                <pre className="overflow-x-auto whitespace-pre no-scrollbar text-neutral-300">
                   <code>{codeSnippets[activeTab]}</code>
                 </pre>
               </div>
@@ -444,7 +444,7 @@ else:
                       <span className="flex items-center gap-2"><MessageSquare size={14} className="text-accent shrink-0" /> {faq.question}</span>
                       <ChevronDown
                         size={16}
-                        className={`text-neutral-450 transition-transform duration-300 shrink-0 ${
+                        className={`text-neutral-500 transition-transform duration-300 shrink-0 ${
                           isFaqOpen ? "rotate-180" : ""
                         }`}
                       />

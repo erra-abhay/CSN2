@@ -6,6 +6,7 @@ import Footer from "@/components/footer";
 import HowItWorks from "@/components/how-it-works";
 import Link from "next/link";
 import { ArrowLeft, ShieldCheck, Key, Code2, AlertTriangle, Cpu, Lock, Terminal, Check } from "lucide-react";
+import { FloatingCubesBackground } from "@/components/cube-animation";
 
 export default function HowItWorksPage() {
   const [sdkTab, setSdkTab] = useState<"node" | "python" | "rust" | "go">("node");
@@ -99,7 +100,8 @@ func VerifyMerklePath(leaf string, proof []string, root string) bool {
   return (
     <>
       <NavBar />
-      <main className="bg-[#FAF9F6] min-h-screen text-neutral-800 font-sans pt-32 pb-16">
+      <main className="relative bg-[#FAF9F6] min-h-screen text-neutral-800 font-sans pt-32 pb-16 overflow-hidden">
+        <FloatingCubesBackground count={10} />
         <div className="max-w-7xl mx-auto px-6 mb-6">
           {/* Back link */}
           <Link
@@ -151,7 +153,7 @@ func VerifyMerklePath(leaf string, proof []string, root string) bool {
                       <span className="text-white font-bold">Root = SHA256( H_AB || H_CD )</span>
                     </div>
                   </div>
-                  <div className="border-t border-neutral-800 pt-3 text-[10px] text-neutral-450 leading-relaxed font-sans font-medium">
+                  <div className="border-t border-neutral-800 pt-3 text-[10px] text-neutral-400 leading-relaxed font-sans font-medium">
                     To audit a single Leaf hash (e.g. H_A), the verify client only needs the sibling hash H_B and parent sibling H_CD to calculate the root. This is the **Merkle Proof**. It reduces verification checks on 1,000,000 documents to just 20 hashing iterations.
                   </div>
                 </div>
@@ -264,7 +266,7 @@ func VerifyMerklePath(leaf string, proof []string, root string) bool {
                     <span className="flex items-center gap-1.5"><Code2 size={12} className="text-accent" /> sdk_verify_path.{sdkTab === "node" ? "ts" : sdkTab === "python" ? "py" : sdkTab === "rust" ? "rs" : "go"}</span>
                     <span className="w-1.5 h-1.5 rounded-full bg-status-green" />
                   </div>
-                  <pre className="overflow-x-auto whitespace-pre no-scrollbar">
+                  <pre className="overflow-x-auto whitespace-pre no-scrollbar text-neutral-300">
                     <code>{sdkSnippets[sdkTab]}</code>
                   </pre>
                 </div>

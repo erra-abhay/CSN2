@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ArrowLeft, CheckCircle2, ShieldAlert, Loader2, Key, Check, Award, FileText, Database, Shield, Layers, HelpCircle, CheckSquare, Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { FloatingCubesBackground } from "@/components/cube-animation";
 
 interface Certificate {
   id: string;
@@ -222,7 +223,7 @@ function VerificationContent() {
         
         {/* Left: Certificate selector list */}
         <div className="lg:col-span-3 space-y-4">
-          <h2 className="text-sm font-bold text-neutral-450 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <h2 className="text-sm font-bold text-neutral-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
             <Award size={14} className="text-accent" /> Available Credentials for Audit
           </h2>
 
@@ -298,7 +299,7 @@ function VerificationContent() {
 
         {/* Right: Validation Terminal Logs */}
         <div className="lg:col-span-2 space-y-6">
-          <h2 className="text-sm font-bold text-neutral-450 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <h2 className="text-sm font-bold text-neutral-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
             <Shield size={14} className="text-accent" /> Cryptographic Telemetry console
           </h2>
 
@@ -355,7 +356,7 @@ function VerificationContent() {
                   <div><span className="text-neutral-500">ECDSA verify:</span> SIGNATURE OK</div>
                   <div><span className="text-neutral-500">Merkle root:</span> ROOT MATCHED</div>
                   <div><span className="text-neutral-500">Block status:</span> SYNCED</div>
-                  <div className="text-[9px] text-neutral-450 border-t border-neutral-850 pt-2 font-mono break-all leading-normal select-all">
+                  <div className="text-[9px] text-neutral-400 border-t border-neutral-850 pt-2 font-mono break-all leading-normal select-all">
                     Tx: {result.txHash}
                   </div>
                 </div>
@@ -399,13 +400,13 @@ function VerificationContent() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-[10px] text-neutral-600">
               <div className="bg-[#FAF9F6] border border-neutral-200/50 p-4 rounded-xl space-y-1">
-                <span className="text-[8px] text-neutral-450 uppercase font-black tracking-wider block">Decrypted Signed Hash</span>
+                <span className="text-[8px] text-neutral-500 uppercase font-black tracking-wider block">Decrypted Signed Hash</span>
                 <span className="text-status-green font-bold truncate block">{result.hash}</span>
                 <span className="text-[8px] text-neutral-400 block pt-1">// Decrypted via Public Key: {result.signature.slice(0, 14)}...</span>
               </div>
               
               <div className="bg-[#FAF9F6] border border-neutral-200/50 p-4 rounded-xl space-y-1">
-                <span className="text-[8px] text-neutral-450 uppercase font-black tracking-wider block">Re-computed Document Hash</span>
+                <span className="text-[8px] text-neutral-500 uppercase font-black tracking-wider block">Re-computed Document Hash</span>
                 <span className="text-status-green font-bold truncate block">{result.hash}</span>
                 <span className="text-[8px] text-neutral-400 block pt-1">// Hashed locally using SHA-256 algorithm</span>
               </div>
@@ -448,27 +449,27 @@ function VerificationContent() {
 
               <div className="relative z-10 space-y-6">
                 <div className="border-b border-neutral-200/60 pb-4">
-                  <span className="text-[10px] font-bold text-neutral-450 uppercase tracking-wider block">Issuing Authority</span>
+                  <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Issuing Authority</span>
                   <span className="text-sm font-extrabold text-neutral-900">{result.institution}</span>
                 </div>
 
                 <div>
-                  <span className="text-[10px] font-bold text-neutral-450 uppercase tracking-wider block">Student Graduate</span>
+                  <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Student Graduate</span>
                   <span className="text-xl font-extrabold text-neutral-900 tracking-tight">{result.studentName}</span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <span className="text-[10px] font-bold text-neutral-450 uppercase tracking-wider block">Degree / Award Title</span>
+                    <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Degree / Award Title</span>
                     <span className="text-xs font-bold text-neutral-850">{result.degree}</span>
                   </div>
                   <div>
-                    <span className="text-[10px] font-bold text-neutral-450 uppercase tracking-wider block">Academic Grade</span>
+                    <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Academic Grade</span>
                     <span className="text-xs font-bold text-neutral-850">{result.grade}</span>
                   </div>
                 </div>
 
-                <div className="flex justify-between items-center text-[10px] font-semibold text-neutral-450 pt-2 border-t border-neutral-200/60 font-mono">
+                <div className="flex justify-between items-center text-[10px] font-semibold text-neutral-500 pt-2 border-t border-neutral-200/60 font-mono">
                   <span>Date: {result.date}</span>
                   <span>ID: {result.id}</span>
                 </div>
@@ -502,7 +503,8 @@ export default function VerifyPage() {
   return (
     <>
       <NavBar />
-      <div className="bg-[#FAF9F6] min-h-screen text-neutral-800 font-sans pt-32 pb-16 px-6">
+      <div className="relative bg-[#FAF9F6] min-h-screen text-neutral-800 font-sans pt-32 pb-16 px-6 overflow-hidden">
+        <FloatingCubesBackground count={10} />
         <Suspense fallback={
           <div className="max-w-4xl mx-auto flex items-center justify-center py-20">
             <Loader2 className="animate-spin text-accent w-8 h-8" />

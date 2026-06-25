@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useDeployment } from "@/lib/deployment-store";
 import { CheckCircle2, Play, ArrowRight, X, Terminal } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { FloatingCubesBackground } from "./cube-animation";
 
 export default function Hero() {
   const { state, triggerPromotion } = useDeployment();
@@ -75,6 +76,9 @@ export default function Hero() {
 
   return (
     <section className="relative pt-32 pb-44 overflow-hidden flex flex-col items-center justify-center">
+      {/* Reusable floating background blockchain cubes */}
+      <FloatingCubesBackground count={12} />
+
       {/* Dynamic blurred ambient gradient background */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-blue-200/40 blur-[120px] animate-gradient-slow" />
@@ -91,7 +95,7 @@ export default function Hero() {
         </div>
 
         {/* Giant headline */}
-        <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-neutral-900 leading-[1.08] mb-6 max-w-3xl mx-auto">
+        <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-neutral-900 leading-[1.08] mb-6 max-w-3xl mx-auto">
           Cryptographic Trust.
           <span className="block mt-2">
             Instantly{" "}

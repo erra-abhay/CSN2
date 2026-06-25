@@ -46,7 +46,7 @@ export default function NavBar() {
           </Link>
           <div className="px-2 py-0.5 bg-neutral-100 text-neutral-500 rounded text-[10px] font-mono border border-neutral-200/50 flex items-center gap-1.5 shadow-sm">
             <span className="w-1 h-1 rounded-full bg-status-green animate-pulse" />
-            <span className="text-neutral-450 uppercase font-bold text-[8px] tracking-wider">Node:</span>
+            <span className="text-neutral-500 uppercase font-bold text-[8px] tracking-wider">Node:</span>
             <span className="font-semibold text-[9px]">{state.hostname}</span>
           </div>
         </div>

@@ -5,12 +5,14 @@ import { ArrowLeft, Terminal, Server, Shield, Globe, Award, Lock, FileSpreadshee
 import Link from "next/link";
 import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
+import { FloatingCubesBackground } from "@/components/cube-animation";
 
 export default function ArchitectureDeepDive() {
   return (
     <>
       <NavBar />
-      <div className="bg-[#FAF9F6] min-h-screen text-neutral-800 font-sans pt-32 pb-16 px-6">
+      <div className="relative bg-[#FAF9F6] min-h-screen text-neutral-800 font-sans pt-32 pb-16 px-6 overflow-hidden">
+        <FloatingCubesBackground count={10} />
         <div className="max-w-4xl mx-auto">
           {/* Back Link */}
           <Link
@@ -43,7 +45,7 @@ export default function ArchitectureDeepDive() {
               The Trueva ecosystem detaches credential storage from verification paths, routing requests through isolated execution layers to ensure sub-120ms latencies and zero data leakage:
             </p>
 
-            <div className="bg-neutral-900 text-neutral-450 font-mono text-[9px] p-5 rounded-xl border border-neutral-850 leading-normal overflow-x-auto whitespace-pre no-scrollbar">
+            <div className="bg-neutral-900 text-neutral-300 font-mono text-[9px] p-5 rounded-xl border border-neutral-850 leading-normal overflow-x-auto whitespace-pre no-scrollbar">
 {` +-------------------------------------------------------------------------------+
  |                              TRUEVA DATA HIGHWAY                              |
  +-------------------------------------------------------------------------------+
@@ -95,11 +97,11 @@ export default function ArchitectureDeepDive() {
                 Instead of anchoring each certificate individually—which is slow and public-exposing—Trueva aggregates multiple records into a single Merkle Tree. Only the single cryptographic root hash is committed to the blockchain, protecting privacy while proving existence.
               </p>
 
-              <div className="bg-neutral-900 rounded-xl p-4 font-mono text-[11px] text-neutral-450 leading-relaxed border border-neutral-800">
+              <div className="bg-neutral-900 rounded-xl p-4 font-mono text-[11px] text-neutral-300 leading-relaxed border border-neutral-800">
                 <div className="text-neutral-500 border-b border-neutral-800 pb-2 mb-2 uppercase tracking-wider text-[9px] font-bold">
                   trueva_cert_anchor.sh
                 </div>
-                <pre className="overflow-x-auto whitespace-pre no-scrollbar">
+                <pre className="overflow-x-auto whitespace-pre no-scrollbar text-neutral-300">
 {`# 1. Generate SHA-256 hash for document metadata
 sha256sum student_degree_payload.json > cert_hash.txt
 
@@ -216,11 +218,11 @@ done`}
                 The smart contract deployed on the Trueva Proof-of-Authority ledger registers Merkle roots, manages authorized institutional public signing keys, and registers credential revocation status updates.
               </p>
 
-              <div className="bg-neutral-900 rounded-xl p-4 font-mono text-[11px] text-neutral-450 leading-relaxed border border-neutral-800">
+              <div className="bg-neutral-900 rounded-xl p-4 font-mono text-[11px] text-neutral-300 leading-relaxed border border-neutral-800">
                 <div className="text-neutral-500 border-b border-neutral-800 pb-2 mb-2 uppercase tracking-wider text-[9px] font-bold">
                   TruevaRegistry.sol (Registry Contract Blueprint)
                 </div>
-                <pre className="overflow-x-auto whitespace-pre no-scrollbar">
+                <pre className="overflow-x-auto whitespace-pre no-scrollbar text-neutral-300">
 {`// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
