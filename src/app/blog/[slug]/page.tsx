@@ -2,7 +2,7 @@
 
 import React, { use } from "react";
 import Link from "next/link";
-import { ArrowLeft, Clock, Calendar, ArrowRight, ShieldCheck, Key, Database, Cpu, Lock } from "lucide-react";
+import { ArrowLeft, Clock, Calendar, ArrowRight, ShieldCheck, Key, Database, Cpu, Lock, Terminal, Globe } from "lucide-react";
 import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { blogPosts } from "../page";
@@ -11,7 +11,7 @@ import { motion } from "framer-motion";
 // Detail bodies for the posts
 const postBodies: Record<string, React.ReactNode> = {
   "decentralized-credential-verification": (
-    <div className="space-y-6 text-neutral-600 text-sm md:text-base leading-relaxed">
+    <div className="space-y-6 text-neutral-600 text-sm md:text-base leading-relaxed font-sans font-medium">
       <p>
         Academic credential fraud is a multi-million dollar problem. Standard degree checks are slow, manual, and rely heavily on central registrar databases. 
         When employers query an institution to verify a graduate's degree, they trigger data leaks and create network latency.
@@ -31,7 +31,7 @@ const postBodies: Record<string, React.ReactNode> = {
         </p>
       </div>
 
-      <h3 className="text-lg font-bold text-neutral-950 mt-8 mb-2">Cryptographic Validation Pipeline</h3>
+      <h3 className="text-lg font-bold text-neutral-950 mt-8 mb-2 font-sans">Cryptographic Validation Pipeline</h3>
       <p>
         The step-by-step lifecycle of anchoring certificate records onto the Trueva ledger proceeds through these stages:
       </p>
@@ -90,7 +90,7 @@ const postBodies: Record<string, React.ReactNode> = {
     </div>
   ),
   "preventing-certificate-tampering": (
-    <div className="space-y-6 text-neutral-600 text-sm md:text-base leading-relaxed">
+    <div className="space-y-6 text-neutral-600 text-sm md:text-base leading-relaxed font-sans font-medium">
       <p>
         Ledger security is only as strong as its consensus mechanism. In public blockchains, Proof-of-Work (PoW) or Proof-of-Stake (PoS) are used. 
         However, for institutional credential registries, **Proof-of-Authority (PoA)** consensus serves as the optimal framework. 
@@ -128,7 +128,7 @@ const postBodies: Record<string, React.ReactNode> = {
     </div>
   ),
   "scalable-verification-rpc-gateways": (
-    <div className="space-y-6 text-neutral-600 text-sm md:text-base leading-relaxed">
+    <div className="space-y-6 text-neutral-600 text-sm md:text-base leading-relaxed font-sans font-medium">
       <p>
         Building a blockchain registry is only the first step. To serve thousands of query requests per second from employment sites and background check companies, the network must scale its read capability. 
         Trueva accomplishes this by separating the transaction validators from the **RPC Verification Gateway Layer**.
@@ -165,7 +165,7 @@ const postBodies: Record<string, React.ReactNode> = {
     </div>
   ),
   "consensus-mechanisms-poa-pos": (
-    <div className="space-y-6 text-neutral-600 text-sm md:text-base leading-relaxed">
+    <div className="space-y-6 text-neutral-600 text-sm md:text-base leading-relaxed font-sans font-medium">
       <p>
         Enterprise record ledgers have distinct requirements compared to public cryptocurrency networks. Public chains rely on Proof-of-Stake (PoS) to coordinate anonymous actors. 
         For trusted academic credentials, however, **Proof-of-Authority (PoA)** offers superior speed, deterministic finality, and zero gas-price volatility.
@@ -226,7 +226,7 @@ const postBodies: Record<string, React.ReactNode> = {
     </div>
   ),
   "privacy-preserving-zero-knowledge": (
-    <div className="space-y-6 text-neutral-600 text-sm md:text-base leading-relaxed">
+    <div className="space-y-6 text-neutral-600 text-sm md:text-base leading-relaxed font-sans font-medium">
       <p>
         The biggest challenge of publishing certificate records on public ledger registries is privacy. How do we allow employers to verify a degree without exposing personal identifiable information (PII) like names, birthdates, and grades to the public blockchain history? 
         The solution lies in **Zero-Knowledge Merkle Proofs**.
@@ -261,6 +261,67 @@ const postBodies: Record<string, React.ReactNode> = {
         Zero-Knowledge verification ensures academic credentials are 100% auditable while maintaining absolute student privacy, complying with GDPR and strict educational confidentiality rules.
       </p>
     </div>
+  ),
+  "w3c-verifiable-credentials-dids": (
+    <div className="space-y-6 text-neutral-600 text-sm md:text-base leading-relaxed font-sans font-medium">
+      <p>
+        The landscape of digital identity is shifting toward **Self-Sovereign Identity (SSI)** models. Under this model, individuals hold custody of their data using standard cryptographic keys rather than third-party servers. 
+        Trueva implements these concepts directly via **W3C Verifiable Credentials (VC)** and **Decentralized Identifiers (DIDs)**.
+      </p>
+
+      <div className="my-8 border border-neutral-200/50 bg-neutral-50 rounded-2xl p-6">
+        <h4 className="font-bold text-neutral-900 mb-3 flex items-center gap-1.5 text-sm uppercase tracking-wider">
+          <Globe size={16} className="text-accent" /> W3C Identity Specs
+        </h4>
+        <p className="text-xs text-neutral-600 leading-relaxed font-semibold">
+          A Decentralized Identifier (DID) is a new type of globally unique identifier that does not require a centralized registration authority. DIDs resolve to DID Documents containing cryptographic public keys of registrars:
+          <span className="block my-2 font-mono text-neutral-700 bg-white p-2.5 rounded border border-neutral-250/50 text-[9px] select-all">
+            did:trueva:stan-registrar-node-4281
+          </span>
+        </p>
+      </div>
+
+      <h3 className="text-lg font-bold text-neutral-950 mt-8 mb-2">Verifiable Credential Schema Anatomy</h3>
+      <p>
+        A W3C credential consists of three key nodes: the **Issuer** (Signs the VC), the **Holder** (Stores the VC in a local key wallet), and the **Verifier** (Audits validity against registry nodes).
+      </p>
+      
+      <div className="bg-neutral-900 rounded-xl p-4 font-mono text-[10px] text-neutral-450 leading-relaxed border border-neutral-800 my-6">
+        <div className="text-neutral-500 border-b border-neutral-800 pb-2 mb-2 uppercase tracking-wider text-[8px] font-bold">
+          sample_w3c_credential.json
+        </div>
+        <pre className="overflow-x-auto whitespace-pre no-scrollbar">
+{`{
+  "@context": [
+    "https://www.w3.org/2018/credentials/v1",
+    "https://schema.csn2.me/trueva/v1"
+  ],
+  "id": "trueva:cert:stan-cs-4281",
+  "type": ["VerifiableCredential", "UniversityDegreeCredential"],
+  "issuer": "did:trueva:stan-registrar-node",
+  "issuanceDate": "2026-06-25T12:00:00Z",
+  "credentialSubject": {
+    "id": "did:key:z6MkpTHR8VNs",
+    "degree": "Bachelor of Science in Computer Science",
+    "gpa": "3.92"
+  },
+  "proof": {
+    "type": "Ed25519Signature2020",
+    "created": "2026-06-25T12:05:00Z",
+    "verificationMethod": "did:trueva:stan-registrar-node#key-1",
+    "proofPurpose": "assertionMethod",
+    "proofValue": "z3h29Ak2..."
+  }
+}`}
+        </pre>
+      </div>
+
+      <h3 className="text-lg font-bold text-neutral-950 mt-8 mb-2">Interoperability and EBSI Standards</h3>
+      <p>
+        By complying with W3C standards, Trueva ensures that diplomas can be recognized across international borders. 
+        It integrates with the European Blockchain Services Infrastructure (EBSI) network protocols, allowing university registries in Europe and the US to speak the same validation language.
+      </p>
+    </div>
   )
 };
 
@@ -291,7 +352,7 @@ export default function BlogPostDetail({ params }: { params: Promise<{ slug: str
           {/* Back Link */}
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-neutral-500 hover:text-accent transition-colors mb-12 group"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-neutral-500 hover:text-accent transition-colors mb-12 group font-sans"
           >
             <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
             Back to blog index
@@ -299,13 +360,13 @@ export default function BlogPostDetail({ params }: { params: Promise<{ slug: str
 
           {/* Post Header */}
           <div className="mb-12 border-b border-neutral-200/60 pb-8">
-            <span className="px-2.5 py-0.5 bg-accent/10 text-accent rounded text-[10px] font-bold tracking-wide uppercase">
+            <span className="px-2.5 py-0.5 bg-accent/10 text-accent rounded text-[10px] font-bold tracking-wide uppercase font-sans">
               {post.tag}
             </span>
-            <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-neutral-950 mt-4 mb-6 leading-tight">
+            <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-neutral-955 mt-4 mb-6 leading-tight font-sans">
               {post.title}
             </h1>
-            <div className="flex flex-wrap items-center gap-3.5 text-xs text-neutral-400 font-semibold">
+            <div className="flex flex-wrap items-center gap-3.5 text-xs text-neutral-400 font-semibold font-sans">
               <span className="flex items-center gap-1">
                 <Calendar size={12} />
                 {post.date}
@@ -327,7 +388,7 @@ export default function BlogPostDetail({ params }: { params: Promise<{ slug: str
           </motion.div>
 
           {/* Author/Footer callout */}
-          <div className="border border-neutral-200/60 rounded-xl p-5 bg-[#FAF9F6] flex justify-between items-center gap-4 text-xs font-semibold text-neutral-500">
+          <div className="border border-neutral-200/60 rounded-xl p-5 bg-[#FAF9F6] flex justify-between items-center gap-4 text-xs font-semibold text-neutral-500 font-sans">
             <span>Written by csn2.me Registry Team</span>
             <Link href="/" className="text-accent flex items-center gap-1">
               Back to Home <ArrowRight size={12} />

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
 import Link from "next/link";
-import { ArrowLeft, Award, CheckCircle, Copy, Key, Loader2, Sparkles, Database, ShieldCheck, Layers, Cpu, ArrowRight } from "lucide-react";
+import { ArrowLeft, Award, CheckCircle, Copy, Key, Loader2, Sparkles, Database, ShieldCheck, Layers, Cpu, ArrowRight, Code, Settings } from "lucide-react";
 
 interface Certificate {
   id: string;
@@ -25,6 +25,31 @@ export default function IssuePage() {
   const [issuedCert, setIssuedCert] = useState<Certificate | null>(null);
   const [copySuccess, setCopySuccess] = useState(false);
 
+  // Payload Builder states
+  const [includeGpa, setIncludeGpa] = useState(true);
+  const [includeId, setIncludeId] = useState(true);
+  const [includeDate, setIncludeDate] = useState(true);
+  const [hashAlgo, setHashAlgo] = useState<"SHA-256" | "SHA3-256">("SHA-256");
+  const [builderMajor, setBuilderMajor] = useState("Computer Science");
+  const [builderSchool, setBuilderSchool] = useState("Stanford University");
+
+  const [jsonPayload, setJsonPayload] = useState("");
+
+  // Update dynamic JSON payload preview on builder state changes
+  useEffect(() => {
+    const payload: Record<string, any> = {
+      issuer: builderSchool,
+      recipient: "John Doe",
+      award: `Bachelor of Science in ${builderMajor}`,
+    };
+    if (includeId) payload.studentId = "STU-882109";
+    if (includeGpa) payload.cumulativeGpa = "3.92";
+    if (includeDate) payload.graduationDate = new Date().toISOString().split("T")[0];
+    payload.checksumAlgorithm = hashAlgo;
+
+    setJsonPayload(JSON.stringify(payload, null, 2));
+  }, [includeGpa, includeId, includeDate, hashAlgo, builderMajor, builderSchool]);
+
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
     setCopySuccess(true);
@@ -44,19 +69,9 @@ export default function IssuePage() {
           setLoadingStep(4); // Anchoring block
 
           setTimeout(() => {
-            // Generate a realistic mock certificate
-            const mockCerts = [
-              { name: "John Doe", school: "Stanford University", degree: "Master of Science in Computer Science", id: "trueva:cert:stan-cs-4281" },
-              { name: "Emily Watson", school: "University of California, Berkeley", degree: "Bachelor of Arts in Data Science", id: "trueva:cert:berk-ds-8821" },
-              { name: "David Kim", school: "Massachusetts Institute of Technology", degree: "Master of Engineering in AI", id: "trueva:cert:mit-ai-5060" }
-            ];
-            
-            const selectedMock = mockCerts[Math.floor(Math.random() * mockCerts.length)];
-            const randomSuffix = Math.random().toString(36).substring(2, 6);
-            const finalId = `${selectedMock.id}-${randomSuffix}`;
+            // Generate a realistic mock certificate matching builder choices
             const date = new Date().toISOString().split("T")[0];
-            
-            const rawPayload = `${selectedMock.name.toLowerCase()}|${selectedMock.school.toLowerCase()}|${selectedMock.degree.toLowerCase()}|${date}`;
+            const rawPayload = `${builderSchool.toLowerCase()}|john doe|${builderMajor.toLowerCase()}|${date}`;
             
             // Hash simulation
             let hashValue = "0x";
@@ -70,11 +85,11 @@ export default function IssuePage() {
             const blockHeight = "blk-" + (4821 + Math.floor(Math.random() * 30));
 
             const newCert: Certificate = {
-              id: finalId,
-              studentName: selectedMock.name,
-              institution: selectedMock.school,
-              degree: selectedMock.degree,
-              grade: "First Class Honours",
+              id: `trueva:cert:${builderSchool.slice(0, 4).toLowerCase()}-${builderMajor.slice(0, 2).toLowerCase()}-${Math.floor(1000 + Math.random() * 9000)}`,
+              studentName: "John Doe",
+              institution: builderSchool,
+              degree: `Bachelor of Science in ${builderMajor}`,
+              grade: includeGpa ? "GPA 3.92 (Summa Cum Laude)" : "Passed with Honours",
               date,
               hash: hashValue,
               signature,
@@ -137,6 +152,130 @@ export default function IssuePage() {
             <p className="text-neutral-600 text-base md:text-lg leading-relaxed max-w-3xl">
               Trueva does not store certificates in standard databases. Instead, academic records are processed cryptographically by institutions and committed as immutable anchors onto a PoA ledger.
             </p>
+          </div>
+
+          {/* Interactive developer payload builder section */}
+          <div className="bg-white border border-neutral-200/50 rounded-3xl p-6 md:p-8 shadow-sm mb-12">
+            <h2 className="text-xl font-bold text-neutral-900 mb-4 flex items-center gap-2">
+              <Code size={18} className="text-accent" /> Batch Payload JSON Schema Builder
+            </h2>
+            <p className="text-xs md:text-sm text-neutral-600 leading-relaxed mb-6 font-medium">
+              Toggle switches below to compile mock JSON schemas. See how the metadata payload is structured for local cryptographic hashing:
+            </p>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+              
+              {/* Toggles */}
+              <div className="space-y-4 bg-[#FAF9F6] p-5 rounded-2xl border border-neutral-200/40 flex flex-col justify-between">
+                <div className="space-y-4">
+                  {/* Selector 1 */}
+                  <div>
+                    <label className="block text-[9px] font-bold text-neutral-450 uppercase mb-1">Select Institution</label>
+                    <select 
+                      value={builderSchool}
+                      onChange={(e) => setBuilderSchool(e.target.value)}
+                      className="w-full p-2 bg-white border border-neutral-200 rounded-lg text-xs font-semibold focus:border-accent outline-none"
+                    >
+                      <option value="Stanford University">Stanford University</option>
+                      <option value="Massachusetts Institute of Technology">MIT</option>
+                      <option value="University of California, Berkeley">UC Berkeley</option>
+                    </select>
+                  </div>
+
+                  {/* Selector 2 */}
+                  <div>
+                    <label className="block text-[9px] font-bold text-neutral-450 uppercase mb-1">Select Major Field</label>
+                    <select 
+                      value={builderMajor}
+                      onChange={(e) => setBuilderMajor(e.target.value)}
+                      className="w-full p-2 bg-white border border-neutral-200 rounded-lg text-xs font-semibold focus:border-accent outline-none"
+                    >
+                      <option value="Computer Science">Computer Science</option>
+                      <option value="Mathematics">Mathematics</option>
+                      <option value="Data Science">Data Science</option>
+                    </select>
+                  </div>
+
+                  {/* Toggles grid */}
+                  <div className="grid grid-cols-2 gap-3 pt-2 text-[10px] font-bold text-neutral-700">
+                    <label className="flex items-center gap-2 cursor-pointer select-none">
+                      <input 
+                        type="checkbox" 
+                        checked={includeGpa} 
+                        onChange={() => setIncludeGpa(!includeGpa)}
+                        className="rounded text-accent focus:ring-accent w-3.5 h-3.5"
+                      />
+                      <span>Include GPA Score</span>
+                    </label>
+
+                    <label className="flex items-center gap-2 cursor-pointer select-none">
+                      <input 
+                        type="checkbox" 
+                        checked={includeId} 
+                        onChange={() => setIncludeId(!includeId)}
+                        className="rounded text-accent focus:ring-accent w-3.5 h-3.5"
+                      />
+                      <span>Include Student ID</span>
+                    </label>
+
+                    <label className="flex items-center gap-2 cursor-pointer select-none">
+                      <input 
+                        type="checkbox" 
+                        checked={includeDate} 
+                        onChange={() => setIncludeDate(!includeDate)}
+                        className="rounded text-accent focus:ring-accent w-3.5 h-3.5"
+                      />
+                      <span>Include Grad Date</span>
+                    </label>
+                  </div>
+
+                  {/* Hashing toggle */}
+                  <div className="pt-2">
+                    <span className="block text-[9px] font-bold text-neutral-450 uppercase mb-2">Checksum Algorithm</span>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setHashAlgo("SHA-256")}
+                        className={`flex-1 py-1.5 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+                          hashAlgo === "SHA-256" ? "bg-accent/10 border-accent/20 text-accent" : "border-neutral-200 bg-white text-neutral-500"
+                        }`}
+                      >
+                        SHA-256
+                      </button>
+                      <button
+                        onClick={() => setHashAlgo("SHA3-256")}
+                        className={`flex-1 py-1.5 text-[10px] font-bold rounded-lg border transition-all cursor-pointer ${
+                          hashAlgo === "SHA3-256" ? "bg-accent/10 border-accent/20 text-accent" : "border-neutral-200 bg-white text-neutral-500"
+                        }`}
+                      >
+                        SHA3-256
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-[9px] text-neutral-400 font-medium leading-relaxed border-t border-neutral-200 pt-3 mt-3">
+                  This custom schema parameters structure determines the SHA-256 byte payload format for the digital signature.
+                </div>
+              </div>
+
+              {/* JSON preview */}
+              <div className="bg-neutral-900 border border-neutral-850 rounded-2xl p-5 text-neutral-300 font-mono text-[10px] leading-relaxed shadow-xl flex flex-col justify-between overflow-x-auto">
+                <div className="flex items-center justify-between border-b border-neutral-800 pb-2 mb-2 text-[8px] font-bold uppercase text-neutral-500 tracking-wider">
+                  <span>credential_metadata.json</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                </div>
+                <pre className="flex-1 overflow-x-auto whitespace-pre no-scrollbar py-2 text-white/95">
+                  <code>{jsonPayload}</code>
+                </pre>
+                <button
+                  onClick={() => handleCopy(jsonPayload)}
+                  className="mt-2 w-full py-2 bg-neutral-800 hover:bg-neutral-700 text-white font-semibold text-[9px] rounded-lg transition-colors flex items-center justify-center gap-1 cursor-pointer"
+                >
+                  <Copy size={10} /> Copy JSON Payload
+                </button>
+              </div>
+
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start mb-16">

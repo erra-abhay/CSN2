@@ -56,6 +56,14 @@ export const blogPosts: BlogPost[] = [
     date: "May 28, 2026",
     readingTime: "8 min read",
     tag: "Zero-Knowledge"
+  },
+  {
+    slug: "w3c-verifiable-credentials-dids",
+    title: "W3C Verifiable Credentials & DIDs: The Future of Sovereign Digital Identity",
+    excerpt: "An extensive analysis of W3C Verifiable Credentials, Decentralized Identifiers (DIDs), and how public registries establish a cryptographic trust layer for digital credentials.",
+    date: "May 20, 2026",
+    readingTime: "9 min read",
+    tag: "W3C Standards"
   }
 ];
 
@@ -121,32 +129,32 @@ export default function BlogListing() {
                 className="bg-white border border-neutral-200/50 rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-premium-hover hover:-translate-y-0.5 transition-all duration-300"
               >
                 <div className="flex flex-wrap items-center gap-3.5 mb-4 text-[11px] font-semibold text-neutral-400">
-                  <span className="px-2.5 py-0.5 bg-neutral-100 text-neutral-600 rounded-full font-bold uppercase tracking-wider">
+                  <span className="px-2.5 py-0.5 bg-neutral-100 text-neutral-600 rounded-full font-bold uppercase tracking-wider font-sans">
                     {post.tag}
                   </span>
-                  <span className="flex items-center gap-1">
+                  <span className="flex items-center gap-1 font-sans">
                     <Calendar size={12} />
                     {post.date}
                   </span>
-                  <span className="flex items-center gap-1">
+                  <span className="flex items-center gap-1 font-sans">
                     <Clock size={12} />
                     {post.readingTime}
                   </span>
                 </div>
 
-                <h2 className="text-xl md:text-2xl font-bold text-neutral-950 mb-3 hover:text-accent transition-colors">
+                <h2 className="text-xl md:text-2xl font-bold text-neutral-950 mb-3 hover:text-accent transition-colors font-sans">
                   <Link href={`/blog/${post.slug}`}>
                     {post.title}
                   </Link>
                 </h2>
 
-                <p className="text-neutral-600 text-sm leading-relaxed mb-6 font-medium">
+                <p className="text-neutral-600 text-sm leading-relaxed mb-6 font-medium font-sans">
                   {post.excerpt}
                 </p>
 
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="inline-flex items-center gap-1 text-xs font-bold text-accent hover:text-accent-hover transition-colors group"
+                  className="inline-flex items-center gap-1 text-xs font-bold text-accent hover:text-accent-hover transition-colors group font-sans"
                 >
                   Read full article
                   <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
