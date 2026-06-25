@@ -20,18 +20,24 @@ export default function NavBar() {
   }, []);
 
   const handleWatchDeploy = () => {
-    // Scroll to the recent-deploys section
+    if (window.location.pathname !== "/") {
+      window.location.href = "/#live-deploys";
+      return;
+    }
     const target = document.getElementById("live-deploys");
     if (target) {
       target.scrollIntoView({ behavior: "smooth" });
     }
-    // Also trigger the promotion simulation
     setTimeout(() => {
       triggerPromotion();
     }, 600);
   };
 
   const handleScrollTo = (id: string) => {
+    if (window.location.pathname !== "/") {
+      window.location.href = `/#${id}`;
+      return;
+    }
     const target = document.getElementById(id);
     if (target) {
       target.scrollIntoView({ behavior: "smooth" });

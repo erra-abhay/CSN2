@@ -1,5 +1,4 @@
 import React from "react";
-import { DeploymentProvider } from "@/lib/deployment-store";
 import NavBar from "@/components/navbar";
 import Hero from "@/components/hero";
 import StatsStrip from "@/components/stats-strip";
@@ -11,7 +10,7 @@ import Footer from "@/components/footer";
 
 export default function Home() {
   return (
-    <DeploymentProvider>
+    <>
       <NavBar />
       <main className="flex-grow">
         <Hero />
@@ -22,6 +21,6 @@ export default function Home() {
         <ClosingCta />
       </main>
       <Footer />
-    </DeploymentProvider>
+    </>
   );
 }
