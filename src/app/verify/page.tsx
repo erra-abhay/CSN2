@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ArrowLeft, CheckCircle2, ShieldAlert, Loader2, Key, Check, Award, FileText, Database, Shield, Layers, HelpCircle, CheckSquare, Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FloatingCubesBackground } from "@/components/cube-animation";
+import { FloatingCubesBackground, RotatingCubeHeader } from "@/components/cube-animation";
 
 interface Certificate {
   id: string;
@@ -155,7 +155,8 @@ function VerificationContent() {
         <span className="px-2.5 py-0.5 bg-accent/10 text-accent rounded text-[10px] font-bold tracking-wide uppercase">
           RPC Node Audits
         </span>
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-neutral-900 mt-4 mb-6">
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-neutral-900 mt-4 mb-6 flex items-center gap-3">
+          <RotatingCubeHeader size={38} />
           Certificate Auditing Portal
         </h1>
         <p className="text-neutral-600 text-base md:text-lg leading-relaxed max-w-3xl">

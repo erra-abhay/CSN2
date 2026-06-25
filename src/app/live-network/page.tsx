@@ -8,7 +8,7 @@ import ClosingCta from "@/components/closing-cta";
 import Link from "next/link";
 import { ArrowLeft, Cpu, Activity, ShieldCheck, Key, Globe, Wifi, Settings } from "lucide-react";
 import { useDeployment } from "@/lib/deployment-store";
-import { FloatingCubesBackground } from "@/components/cube-animation";
+import { FloatingCubesBackground, RotatingCubeHeader } from "@/components/cube-animation";
 
 export default function LiveNetworkPage() {
   const { state, triggerPromotion } = useDeployment();
@@ -69,7 +69,8 @@ export default function LiveNetworkPage() {
             <span className="px-2.5 py-0.5 bg-accent/10 text-accent rounded text-[10px] font-bold tracking-wide uppercase">
               Decentralized Nodes Dashboard
             </span>
-            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-neutral-900 mt-4 mb-4">
+            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-neutral-900 mt-4 mb-4 flex items-center gap-3">
+              <RotatingCubeHeader size={38} />
               Consensus Node Simulator
             </h1>
             <p className="text-neutral-600 text-sm md:text-base leading-relaxed max-w-xl">

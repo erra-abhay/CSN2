@@ -6,7 +6,7 @@ import Footer from "@/components/footer";
 import Link from "next/link";
 import { ArrowLeft, Cpu, Database, Eye, Globe, Key, Search, Server, TrendingUp, BarChart2, Shield } from "lucide-react";
 import { useDeployment } from "@/lib/deployment-store";
-import { FloatingCubesBackground } from "@/components/cube-animation";
+import { FloatingCubesBackground, RotatingCubeHeader } from "@/components/cube-animation";
 
 interface BlockData {
   height: string;
@@ -135,7 +135,8 @@ export default function ExplorerPage() {
               <span className="px-2.5 py-0.5 bg-accent/10 text-accent rounded text-[10px] font-bold tracking-wide uppercase">
                 Consensus Ledger Explorer
               </span>
-              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-neutral-900 mt-4 mb-3">
+              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-neutral-900 mt-4 mb-3 flex items-center gap-3">
+                <RotatingCubeHeader size={38} />
                 Trueva Block Explorer
               </h1>
               <p className="text-neutral-600 text-sm md:text-base leading-relaxed max-w-xl">

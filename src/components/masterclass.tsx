@@ -7,6 +7,8 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { CubeChain } from "./cube-animation";
+
 // Helper for generating SHA-256 hash in browser
 async function sha256Browser(text: string): Promise<string> {
   if (!text) return "0x" + "0".repeat(64);
@@ -403,6 +405,9 @@ export default function Masterclass() {
           <p className="text-neutral-600 text-sm md:text-base max-w-2xl mx-auto font-medium">
             Learn the core mechanics of decentralized registers. Interact with real cryptographic simulators, verify tree models, trace BFT consensus quorums, and test your knowledge.
           </p>
+          <div className="mt-8 max-w-xs mx-auto text-neutral-400">
+            <CubeChain />
+          </div>
         </div>
 
         {/* Masterclass Scroll Modules */}

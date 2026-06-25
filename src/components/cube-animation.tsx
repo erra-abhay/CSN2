@@ -55,7 +55,7 @@ export function CubeChain({ maxCubes = 5 }) {
         <AnimatePresence mode="popLayout">
           {cubes.map((cId, idx) => {
             const isLast = idx === cubes.length - 1;
-            
+
             return (
               <React.Fragment key={cId}>
                 <motion.div
@@ -110,30 +110,31 @@ export function CubeChain({ maxCubes = 5 }) {
 
 // 2. Floating floating 3D cubes for page background decoration
 export function FloatingCubesBackground({ count = 8 }) {
-  const [elements, setElements] = React.useState<Array<{ id: number; left: number; top: number; size: number; delay: number; duration: number }>>([]);
+  const [elements, setElements] = React.useState<Array<{ id: number; left: number; top: number; size: number; delay: number; duration: number; isAccent: boolean }>>([]);
 
   React.useEffect(() => {
     const generated = Array.from({ length: count }, (_, i) => ({
       id: i,
-      left: Math.random() * 90 + 5,
-      top: Math.random() * 85 + 10,
-      size: Math.random() * 16 + 12, // 12px to 28px
+      left: Math.random() * 85 + 5,
+      top: Math.random() * 80 + 10,
+      size: Math.random() * 16 + 14, // 14px to 30px
       delay: Math.random() * 4,
-      duration: Math.random() * 6 + 7, // 7s to 13s
+      duration: Math.random() * 7 + 8, // 8s to 15s
+      isAccent: Math.random() > 0.5, // 50% are accent-colored
     }));
     setElements(generated);
   }, [count]);
 
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none select-none z-0 opacity-[0.07]">
+    <div className="absolute inset-0 overflow-hidden pointer-events-none select-none z-0 opacity-[20.5]">
       {elements.map((el) => (
         <motion.div
           key={el.id}
           initial={{ y: 15, opacity: 0 }}
-          animate={{ 
+          animate={{
             y: [-15, 15, -15],
             rotate: [0, 360],
-            opacity: [0.3, 0.7, 0.3]
+            opacity: [0.4, 0.9, 0.4]
           }}
           transition={{
             duration: el.duration,
@@ -147,9 +148,26 @@ export function FloatingCubesBackground({ count = 8 }) {
             top: `${el.top}%`,
           }}
         >
-          <IsometricCube size={el.size} color="currentColor" className="text-neutral-500" />
+          <IsometricCube
+            size={el.size}
+            color="currentColor"
+            className={el.isAccent ? "text-accent/30" : "text-neutral-400"}
+          />
         </motion.div>
       ))}
     </div>
+  );
+}
+
+// 3. Rotating 3D Isometric Cube for page and section headers
+export function RotatingCubeHeader({ size = 32 }) {
+  return (
+    <motion.div
+      animate={{ rotate: 360 }}
+      transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+      className="text-accent shrink-0 flex items-center justify-center"
+    >
+      <IsometricCube size={size} />
+    </motion.div>
   );
 }

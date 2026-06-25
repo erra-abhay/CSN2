@@ -6,7 +6,7 @@ import Footer from "@/components/footer";
 import HowItWorks from "@/components/how-it-works";
 import Link from "next/link";
 import { ArrowLeft, ShieldCheck, Key, Code2, AlertTriangle, Cpu, Lock, Terminal, Check } from "lucide-react";
-import { FloatingCubesBackground } from "@/components/cube-animation";
+import { FloatingCubesBackground, RotatingCubeHeader } from "@/components/cube-animation";
 
 export default function HowItWorksPage() {
   const [sdkTab, setSdkTab] = useState<"node" | "python" | "rust" | "go">("node");
@@ -119,8 +119,8 @@ func VerifyMerklePath(leaf string, proof []string, root string) bool {
         {/* Mathematics Deep Dive Section */}
         <section className="py-20 bg-white border-t border-neutral-200/40">
           <div className="max-w-4xl mx-auto px-6">
-            <h2 className="text-3xl font-black text-neutral-900 mb-8 flex items-center gap-2">
-              <Cpu className="text-accent" /> Cryptographic Verification Deep-Dive
+            <h2 className="text-3xl font-black text-neutral-900 mb-8 flex items-center gap-3">
+              <RotatingCubeHeader size={28} /> Cryptographic Verification Deep-Dive
             </h2>
 
             <div className="space-y-12 text-neutral-600 text-sm md:text-base leading-relaxed font-medium">

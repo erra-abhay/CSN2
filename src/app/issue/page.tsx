@@ -5,7 +5,7 @@ import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
 import Link from "next/link";
 import { ArrowLeft, Award, CheckCircle, Copy, Key, Loader2, Sparkles, Database, ShieldCheck, Layers, Cpu, ArrowRight, Code, Settings } from "lucide-react";
-import { FloatingCubesBackground } from "@/components/cube-animation";
+import { FloatingCubesBackground, RotatingCubeHeader } from "@/components/cube-animation";
 
 interface Certificate {
   id: string;
@@ -148,8 +148,9 @@ export default function IssuePage() {
             <span className="px-2.5 py-0.5 bg-accent/10 text-accent rounded text-[10px] font-bold tracking-wide uppercase">
               Trueva Protocol Specifications
             </span>
-            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-neutral-900 mt-4 mb-6">
-              How Issuance Works
+            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-neutral-900 mt-4 mb-4 flex items-center gap-3">
+              <RotatingCubeHeader size={38} />
+              Trueva Issuance Simulator
             </h1>
             <p className="text-neutral-600 text-base md:text-lg leading-relaxed max-w-3xl">
               Trueva does not store certificates in standard databases. Instead, academic records are processed cryptographically by institutions and committed as immutable anchors onto a PoA ledger.

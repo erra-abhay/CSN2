@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, Cpu, ShieldCheck, Heart, Milestone, Users, Settings, User } from "lucide-react";
 import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
-import { FloatingCubesBackground } from "@/components/cube-animation";
+import { FloatingCubesBackground, RotatingCubeHeader } from "@/components/cube-animation";
 
 const milestones = [
   {
@@ -82,7 +82,8 @@ export default function AboutPage() {
             <span className="px-2.5 py-0.5 bg-accent/10 text-accent rounded text-[10px] font-bold tracking-wide uppercase">
               Project Context
             </span>
-            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-neutral-900 mt-4 mb-6">
+            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-neutral-900 mt-4 mb-6 flex items-center gap-3">
+              <RotatingCubeHeader size={38} />
               About csn2.me
             </h1>
             <p className="text-neutral-600 text-base md:text-lg leading-relaxed max-w-3xl font-medium">
