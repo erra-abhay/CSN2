@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, Clock, Calendar, ArrowRight } from "lucide-react";
 import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
+import { motion } from "framer-motion";
 
 export interface BlogPost {
   slug: string;
@@ -39,10 +40,46 @@ export const blogPosts: BlogPost[] = [
     date: "June 10, 2026",
     readingTime: "6 min read",
     tag: "RPC Infrastructure"
+  },
+  {
+    slug: "consensus-mechanisms-poa-pos",
+    title: "Proof-of-Authority vs Proof-of-Stake in Enterprise Ledgers",
+    excerpt: "An in-depth analysis of consensus protocols, explaining why Proof-of-Authority serves as the optimal trust architecture for institutional academic record registries.",
+    date: "June 05, 2026",
+    readingTime: "7 min read",
+    tag: "Consensus Protocols"
+  },
+  {
+    slug: "privacy-preserving-zero-knowledge",
+    title: "Privacy-Preserving Credentials: Implementing Zero-Knowledge Merkle Proofs",
+    excerpt: "How to use zero-knowledge cryptography to check degree credentials without exposing personal identifiable information (PII) to verification request logs.",
+    date: "May 28, 2026",
+    readingTime: "8 min read",
+    tag: "Zero-Knowledge"
   }
 ];
 
 export default function BlogListing() {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.12,
+        delayChildren: 0.1
+      }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } 
+    }
+  };
+
   return (
     <>
       <NavBar />
@@ -71,11 +108,17 @@ export default function BlogListing() {
           </div>
 
           {/* Post Listing Grid */}
-          <div className="space-y-8 mb-20">
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            animate="show"
+            className="space-y-8 mb-20"
+          >
             {blogPosts.map((post) => (
-              <div 
+              <motion.div 
                 key={post.slug}
-                className="bg-white border border-neutral-200/50 rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
+                variants={cardVariants}
+                className="bg-white border border-neutral-200/50 rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-premium-hover hover:-translate-y-0.5 transition-all duration-300"
               >
                 <div className="flex flex-wrap items-center gap-3.5 mb-4 text-[11px] font-semibold text-neutral-400">
                   <span className="px-2.5 py-0.5 bg-neutral-100 text-neutral-600 rounded-full font-bold uppercase tracking-wider">
@@ -108,9 +151,9 @@ export default function BlogListing() {
                   Read full article
                   <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
                 </Link>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
         </div>
       </div>
